@@ -8,3 +8,110 @@
 body {
   background-color: #FEFEFE;
 }
+
+.content{
+  display: flex;
+  flex-direction: column;
+  padding: 100px 0;
+  width: 1440px;
+  margin: auto;
+}
+
+.game-info{
+  display: flex;
+  justify-content: space-around;
+  
+}
+
+.card-list{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  width: 100%;
+  padding: 50px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+
+.success-message {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  padding: 50px;
+  border-radius: 6px;
+  background-color: #FFF;
+  transform: translate(-50%, -50%);
+}
+
+.success-message-mask {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgb(0 0 0 / 45%);
+  cursor: pointer;
+}
+
+.success-message-mask.show {
+  display: flex;
+}
+
+.success-message.show {
+  display: flex;
+}
+
+.success-message > h1 {
+  font-size: 3rem;
+  margin-bottom: 20px;
+}
+
+.success-message > h2 {
+  font-size: 1rem;
+  margin-bottom: 10px;
+}
+
+.success-message > img {
+  width: 150px;
+}
+
+.success-message > .success-message--select-difficulty {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  margin: 20px 0;
+  gap: 20px;
+}
+
+.success-message--select-difficulty > button {
+  padding: 15px 20px;
+  border: none;
+  font-size: 1rem;
+  color: #FFF;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all ease 0.3s;
+}
+
+.success-message--select-difficulty > button:hover {
+  opacity: 0.8;
+  transform: scale(1.05);
+}
+
+.success-message--select-difficulty > button:nth-child(1) {
+  background-color: #1c9b1c;
+}
+
+.success-message--select-difficulty > button:nth-child(2) {
+  background-color: #ffa500;
+}
+
+.success-message--select-difficulty > button:nth-child(3) {
+  background-color: #e22727;
+}
