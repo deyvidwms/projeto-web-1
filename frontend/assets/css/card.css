@@ -14,7 +14,9 @@
   box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.733);
 }
 
-.card:hover .card-inner {
+
+.card.done .card-inner,
+.card[data-active='on'] .card-inner {
   transform: rotateY(180deg);
 }
 

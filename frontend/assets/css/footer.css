@@ -6,11 +6,17 @@ footer {
   border-top: 1px solid #ddd;
 }
 
-footer>p>a {
-  color: #999;
-  text-decoration: none;
+footer > p {
+  margin-top: 15px;
 }
 
-footer>p {
-  margin-top: 15px;
+footer > p > a {
+  color: #999;
+  text-decoration: none;
+  transition: all ease 0.3s;
+  cursor: pointer;
+}
+
+footer > p > a:hover {
+  opacity: 0.5;
 }
