@@ -1,10 +1,18 @@
 "use strict";
 
-const numeros = [...Array(3).keys()].map((i) => i.toString());
+/**
+ * 
+ * Fácil - 10
+ * Médio - 15
+ * Difícil - 20
+ * 
+ */
+const numeros = [...Array(10).keys()].map((i) => i.toString());
 
 window.onload = () => {
   sessionStorage.removeItem('idCarta')
   criarCartas();
+  showCurrentYear();
 }
 
 const sortearCartas = (cartas) => {
@@ -89,4 +97,22 @@ const criarCartas = () => {
     const novaCarta = getNovaCarta(carta['id'], carta['carta']);
     document.getElementById('cardLocations').innerHTML += novaCarta;
   }
+}
+
+const showMenuMobile = (element) => {
+  const isShow = element.getAttribute('data-show');
+  element.setAttribute('data-show', `${isShow === 'on' ? 'off' : 'on'}`)
+  document.getElementsByClassName('header-options')[0].setAttribute('class', `header-options ${isShow === 'off' ? 'show' : ''}`);
+}
+
+const showCurrentYear = () => {
+	const currentYear = getCurrentYear();
+	document.getElementById('currentYear').innerText = currentYear;
+
+  console.log(currentYear)
+}
+
+const getCurrentYear = () => {
+	const date = new Date();
+	return date.getFullYear();
 }

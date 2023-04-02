@@ -20,3 +20,9 @@ footer > p > a {
 footer > p > a:hover {
   opacity: 0.5;
 }
+
+@media (max-width: 650px) {
+  footer > p:nth-child(2) {
+    display: none;
+  }
+} 
