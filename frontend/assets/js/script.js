@@ -66,8 +66,8 @@ const virarCarta = (carta) => {
   }
 
   // Ganhou
-  document.getElementsByClassName('success-message-mask')[0].setAttribute('class', 'success-message-mask show');
-  document.getElementsByClassName('success-message')[0].setAttribute('class', 'success-message show');
+  document.getElementsByClassName('success-message-mask')[0].classList.toggle("show");
+  document.getElementsByClassName('success-message')[0].classList.toggle("show");
 }
 
 const getNovaCarta = (idCarta, verso) => {
