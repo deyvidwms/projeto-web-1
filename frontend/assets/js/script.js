@@ -1,5 +1,7 @@
 "use strict";
 
+const API = "http://localhost:3000";
+
 /**
  * 
  * Fácil - 10
@@ -13,6 +15,16 @@ window.onload = () => {
   sessionStorage.removeItem('idCarta')
   criarCartas();
   showCurrentYear();
+}
+
+const showCurrentYear = () => {
+  const currentYear = getCurrentYear();
+  document.getElementById('currentYear').innerText = currentYear;
+}
+
+const getCurrentYear = () => {
+  const date = new Date();
+  return date.getFullYear();
 }
 
 const embaralhar = (lista) => {
@@ -122,12 +134,35 @@ const showMenuMobile = (element) => {
   document.getElementsByClassName('header-options')[0].setAttribute('class', `header-options ${isShow === 'off' ? 'show' : ''}`);
 }
 
-const showCurrentYear = () => {
-  const currentYear = getCurrentYear();
-  document.getElementById('currentYear').innerText = currentYear;
+const consultarPontuacoesGlobais = async () => {
+  const res = await fetch(`${API}/pontuacao`, { mode: 'cors' });
+  return await res.json();
 }
 
-const getCurrentYear = () => {
-  const date = new Date();
-  return date.getFullYear();
+const adicionarPontuacaoGlobal = (nome, pontos) => {
+  fetch(`${API}/pontuacao?nome=${nome}&pontos=${pontos}`, {
+    method: 'POST',
+    headers: { "Content-type": "application/json; charset=UTF-8" }
+  });
+}
+
+const consultarPontuacoesLocais = () => {
+  const pontuacoesLocalStorage = localStorage.getItem('pontuacoes');
+
+  if (pontuacoesLocalStorage === null) {
+    return [];
+  }
+
+  return JSON.parse(pontuacoesLocalStorage);
+}
+
+const adicionarPontuacaoLocal = (nome, pontos) => {
+  const MAXIMO_PONTUACOES = 10;
+
+  let pontuacoes = consultarPontuacoesLocais();
+  pontuacoes.push({ nome, pontos });
+  pontuacoes.sort((p1, p2) => { p1.pontos - p2.pontos })
+  pontuacoes = pontuacoes.slice(0, MAXIMO_PONTUACOES);
+
+  localStorage.setItem('pontuacoes', JSON.stringify(pontuacoes));
 }
