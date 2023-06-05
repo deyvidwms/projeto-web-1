@@ -15,6 +15,13 @@ window.onload = () => {
   sessionStorage.removeItem('idCarta')
   criarCartas();
   showCurrentYear();
+
+  sessionStorage.setItem('score', '0');
+
+  const highscore = localStorage.getItem('highscore');
+  if (highscore == null) {
+    localStorage.setItem('highscore', '0');
+  }
 }
 
 const showCurrentYear = () => {
@@ -111,19 +118,40 @@ const virarCarta = (carta) => {
   if (idPrimeiraCarta !== idCartaAtual) {
     setTimeout(() => {
       desvirarCartas(listaCartas, [idPrimeiraCarta, idCartaAtual]);
+
+      let score = Number(sessionStorage.getItem('score'));
+      console.log(score);
+      if (score > 0) {
+        score -= 1;
+      }
+      sessionStorage.setItem('score', String(score));
+      document.getElementById('score').innerText = score;
     }, 1000);
     sessionStorage.removeItem('idCarta');
     return;
   }
 
-  // Aumentar pontuação
   for (let carta of listaCartas) {
     if ([idCartaAtual, idPrimeiraCarta].includes(carta.getAttribute('data-index'))) {
       definirCartaPronta(carta);
     }
   }
 
+  let score = Number(sessionStorage.getItem('score'));
+  score += 10;
+  sessionStorage.setItem('score', String(score));
+  document.getElementById('score').innerText = score;
+
   if (todasCartasForamViradas(listaCartas)) {
+    const highscore = sessionStorage.getItem('highscore');
+    const score = Number(localStorage.getItem('score'));
+    if (highscore == null || score > Number(highscore)) {
+      localStorage.setItem('highscore', score);
+    }
+
+    adicionarPontuacaoGlobal('Fulaninho', score);
+    adicionarPontuacaoLocal('Fulaninho', score);
+
     alternarVisualizacaoMensagemSucesso();
   }
 }
