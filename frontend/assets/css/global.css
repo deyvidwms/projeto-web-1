@@ -188,3 +188,13 @@ body {
     gap: 10px;
   }
 }
+
+@media (max-width: 400px) {
+  .game-info > .score > h3,
+  .game-info > .highscore > h3,
+  .game-info > .moves > h3 {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+}
