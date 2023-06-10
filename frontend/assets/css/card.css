@@ -1,6 +1,6 @@
 .card {
-  width: 120px;
-  height: 120px;
+  width: 150px;
+  height: 150px;
   perspective: 1000px;
 }
 
@@ -14,7 +14,9 @@
   box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.733);
 }
 
-.card:hover .card-inner {
+
+.card.done .card-inner,
+.card[data-active='on'] .card-inner {
   transform: rotateY(180deg);
 }
 
@@ -42,4 +44,18 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+@media (max-width: 990px) {
+  .card {
+    width: 120px;
+    height: 120px;
+  }
+}
+
+@media (max-width: 750px) {
+  .card {
+    width: 100px;
+    height: 100px;
+  }
 }

@@ -1,16 +1,59 @@
 header {
-  text-align: center;
   display: flex;
   flex-direction: column;
 }
 
 .logo {
-  padding: 15px;
+  display: flex;
+  justify-content: center;
+  background-color: #FFF;
+  width: 100%;
+  padding: 20px;
+  border-bottom: 1px solid #DDD;
+}
+
+.header-mobile {
+  display: none;
+  justify-content: center;
+  padding: 10px;
+  border-bottom: 1px solid #DDD;
 }
 
 .header-options {
   display: flex;
   justify-content: space-around;
-  background-color: #ddd;
+  background-color: #DDD;
   padding: 15px 10px;
+  border-bottom: 1px solid #DDD;
+}
+
+.header-options > p {
+  padding: 15px 10px;
+  cursor: pointer;
+  transition: all ease 0.3s;
+}
+
+.header-options > p:hover {
+  color: #999;
+}
+
+@media (max-width: 650px) {
+  .header-mobile {
+    display: flex;
+  }
+
+  .header-options {
+    display: none;
+    flex-direction: column;
+  }
+
+  .header-options.show {
+    display: flex;
+  }
+}
+
+@media (max-width: 375px) {
+  .logo {
+    font-size: 0.875rem;
+  }
 }
