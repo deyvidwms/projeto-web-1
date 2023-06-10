@@ -2,6 +2,7 @@
   width: 150px;
   height: 150px;
   perspective: 1000px;
+  border-radius: 15px;
 }
 
 .card-inner {
@@ -11,9 +12,14 @@
   text-align: center;
   transition: transform 0.6s;
   transform-style: preserve-3d;
-  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.733);
+  box-shadow: 5px 5px 20px rgb(127 127 127 / 15%),
+              -5px -5px 20px rgb(127 127 127 / 35%);
+  border-radius: 15px;
 }
 
+.card-icon {
+  filter: drop-shadow(0 0 2px rgb(0 0 0))
+}
 
 .card.done .card-inner,
 .card[data-active='on'] .card-inner {
@@ -27,10 +33,12 @@
   height: 100%;
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
+  border-radius: 15px;
+  image-rendering: pixelated;
 }
 
 .card-front {
-  background-color: #bbb;
+  background-color: #ffffff;
   color: black;
   display: flex;
   align-items: center;
@@ -38,6 +46,8 @@
 }
 
 .card-back {
+  border: 10px solid white;
+  border-radius: 20px;
   background-color: #2980b9;
   color: white;
   transform: rotateY(180deg);

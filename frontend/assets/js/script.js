@@ -9,16 +9,15 @@ const API = "http://localhost:3000";
  * Difícil - 20
  * 
  */
-const numeros = [...Array(10).keys()].map((i) => i.toString());
 const emojis = ['😀', '😃', '😄', '😁', '😆', '😅', '🤣', '😂', '🙂', '🙃', '😊', '😇', '🥰', '😍', '🤩', '😘', '😗', '😚', '😙', '😋', '😛', '😜', '🤪', '😝', '🤑', '🤗', '🤭', '🤫', '🤔', '🤐', '🤨', '😐', '😑', '😶', '😶', '😏', '😒', '🙄', '😬', '😮', '🤥', '😌', '😔', '😪', '🤤', '😴', '😷', '🤒', '🤕', '🤢', '🤮', '🤧', '🥵', '🥶', '🥴', '😵', '😵', '🤯', '🤠', '🥳', '😎', '🤓', '🧐', '😟', '🙁', '☹️', '😮', '😯', '😲', '😳', '🥺', '😧', '😨', '😰', '😥', '😢', '😭', '😱', '😖', '😣', '😞', '😓', '😩', '😫', '🥱', '😤'];
 let cartasDoJogo = [];
 var dificuldade = 10;
 
 
-const sortear = () =>{
+const sortear = () => {
   const numerosSorteados = [];
 
-  for(let i = 1; i <= 151; i++){
+  for (let i = 1; i <= 151; i++) {
     numerosSorteados.push(i);
   }
 
@@ -37,17 +36,15 @@ const getPokemon = () => {
 }
 
 const getYugioh = () => {
-  
+
 }
-
-
 
 window.onload = () => {
   sessionStorage.removeItem('idCarta')
   //console.log(numeros);
-  selecionarTema('emoji');
+  selecionarTema('pokemon');
   //criarCartas(sortearCartas(cartasDoJogo));
-  
+
   //criarCartasPokemons(sortearCartas(sortear()));
   showCurrentYear();
 
@@ -59,18 +56,18 @@ window.onload = () => {
   }
 }
 
-
 const selecionarTema = (temaSelecionado) => {
-  if(temaSelecionado == 'emoji'){
+  if (temaSelecionado == 'emoji') {
     cartasDoJogo = [...getEmoji()];
     criarCartas(sortearCartas(cartasDoJogo));
   }
-  else if(temaSelecionado == 'pokemon'){
+  else if (temaSelecionado == 'pokemon') {
     cartasDoJogo = [...getPokemon()];
   }
-  else{
+  else {
     cartasDoJogo = [...getYugioh()];
   }
+
   criarCartasPokemons(sortearCartas(cartasDoJogo));
 }
 
@@ -123,12 +120,12 @@ const criarCartas = (cartas) => {
   }
 }
 
-const criarCartasPokemons = (cartas) =>{
-  for(const carta of cartas ){
+const criarCartasPokemons = (cartas) => {
+  for (const carta of cartas) {
     const novaCarta = criarNovaCarta(
       carta['id'],
-      `<p>Carta ${carta['id']}</p>`,
-      `<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${carta['carta']}.png" class="card-icon">`);
+      `<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" width="50%"></img>`,
+      `<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${carta['carta']}.png" class="card-icon"></img>`);
     document.getElementById('cardLocations').innerHTML += novaCarta;
   }
 }
@@ -162,23 +159,27 @@ const alternarVisualizacaoMensagemSucesso = () => {
   document.getElementsByClassName('success-message')[0].classList.toggle("show");
 }
 
+const virarCartaParaCima = (carta) => { carta.setAttribute('data-active', 'on') };
+const virouUmaCarta = () => { return sessionStorage.getItem('idCarta') !== null };
+
 const virarCarta = (carta) => {
   const idCartaAtual = carta.getAttribute('data-index');
 
-  if (carta.getAttribute('data-active') === 'on') {
+  const cartaEstaComFaceParaCima = carta.getAttribute('data-active') === 'on';
+  if (cartaEstaComFaceParaCima) {
     return;
   }
 
-  carta.setAttribute('data-active', 'on');
+  virarCartaParaCima(carta);
 
-  const idPrimeiraCarta = sessionStorage.getItem('idCarta');
-  if (idPrimeiraCarta === null) {
+  if (!virouUmaCarta()) {
     sessionStorage.setItem('idCarta', idCartaAtual);
     return;
   }
 
   const listaCartas = document.getElementById('cardLocations').children;
 
+  const idPrimeiraCarta = sessionStorage.getItem('idCarta');
   if (idPrimeiraCarta !== idCartaAtual) {
     setTimeout(() => {
       desvirarCartas(listaCartas, [idPrimeiraCarta, idCartaAtual]);
