@@ -10,10 +10,45 @@ const API = "http://localhost:3000";
  * 
  */
 const numeros = [...Array(10).keys()].map((i) => i.toString());
+const emojis = ['😀', '😃', '😄', '😁', '😆', '😅', '🤣', '😂', '🙂', '🙃', '😊', '😇', '🥰', '😍', '🤩', '😘', '😗', '😚', '😙', '😋', '😛', '😜', '🤪', '😝', '🤑', '🤗', '🤭', '🤫', '🤔', '🤐', '🤨', '😐', '😑', '😶', '😶', '😏', '😒', '🙄', '😬', '😮', '🤥', '😌', '😔', '😪', '🤤', '😴', '😷', '🤒', '🤕', '🤢', '🤮', '🤧', '🥵', '🥶', '🥴', '😵', '😵', '🤯', '🤠', '🥳', '😎', '🤓', '🧐', '😟', '🙁', '☹️', '😮', '😯', '😲', '😳', '🥺', '😧', '😨', '😰', '😥', '😢', '😭', '😱', '😖', '😣', '😞', '😓', '😩', '😫', '🥱', '😤'];
+let cartasDoJogo = [];
+var dificuldade = 10;
+
+
+const sortear = () =>{
+  const numerosSorteados = [];
+
+  for(let i = 1; i <= 151; i++){
+    numerosSorteados.push(i);
+  }
+
+  return embaralhar(numerosSorteados).slice(0, dificuldade);
+}
+
+
+const getEmoji = () => {
+  const listaEmojis = embaralhar(emojis);
+  //const randomIndex = Math.floor(Math.random() * emojis.length);
+  return listaEmojis.slice(0, dificuldade);
+}
+
+const getPokemon = () => {
+  return sortear();
+}
+
+const getYugioh = () => {
+  
+}
+
+
 
 window.onload = () => {
   sessionStorage.removeItem('idCarta')
-  criarCartas();
+  //console.log(numeros);
+  selecionarTema('emoji');
+  //criarCartas(sortearCartas(cartasDoJogo));
+  
+  //criarCartasPokemons(sortearCartas(sortear()));
   showCurrentYear();
 
   sessionStorage.setItem('score', '0');
@@ -22,6 +57,21 @@ window.onload = () => {
   if (highscore == null) {
     localStorage.setItem('highscore', '0');
   }
+}
+
+
+const selecionarTema = (temaSelecionado) => {
+  if(temaSelecionado == 'emoji'){
+    cartasDoJogo = [...getEmoji()];
+    criarCartas(sortearCartas(cartasDoJogo));
+  }
+  else if(temaSelecionado == 'pokemon'){
+    cartasDoJogo = [...getPokemon()];
+  }
+  else{
+    cartasDoJogo = [...getYugioh()];
+  }
+  criarCartasPokemons(sortearCartas(cartasDoJogo));
 }
 
 const showCurrentYear = () => {
@@ -48,23 +98,37 @@ const sortearCartas = (cartas) => {
   return embaralhar(duplicar(cartas.map((carta, i) => ({ carta, id: i }))));
 }
 
-const criarNovaCarta = (idCarta, verso) => {
+const criarNovaCarta = (idCarta, frente, verso) => {
   return `<div class="card" data-index="${idCarta}" data-active="off" onClick="virarCarta(this)">
     <div class="card-inner">
       <div class="card-front">
-        <p>? - ${idCarta}</p>
+        ${frente}
       </div>
       <div class="card-back">
-        <p class="card-icon">${verso}</p>
+        <div class="card-back-inner">
+          ${verso}
+        </div>
       </div>
     </div>
   </div>`;
 }
 
-const criarCartas = () => {
-  const cartas = sortearCartas(numeros);
+const criarCartas = (cartas) => {
   for (const carta of cartas) {
-    const novaCarta = criarNovaCarta(carta['id'], carta['carta']);
+    const novaCarta = criarNovaCarta(
+      carta['id'],
+      `<p>Carta ${carta['id']}</p>`,
+      `<p class="card-icon">${carta['carta']}</p>`);
+    document.getElementById('cardLocations').innerHTML += novaCarta;
+  }
+}
+
+const criarCartasPokemons = (cartas) =>{
+  for(const carta of cartas ){
+    const novaCarta = criarNovaCarta(
+      carta['id'],
+      `<p>Carta ${carta['id']}</p>`,
+      `<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${carta['carta']}.png" class="card-icon">`);
     document.getElementById('cardLocations').innerHTML += novaCarta;
   }
 }
@@ -94,7 +158,7 @@ const todasCartasForamViradas = (cartas) => {
 }
 
 const alternarVisualizacaoMensagemSucesso = () => {
-  document.getElementsByClassName('success-message-mask')[0].classList.toggle("show");
+  document.igetElementsByClassName('success-message-mask')[0].classList.toggle("show");
   document.getElementsByClassName('success-message')[0].classList.toggle("show");
 }
 
