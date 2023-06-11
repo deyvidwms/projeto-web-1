@@ -11,7 +11,11 @@ const API = "http://localhost:3000";
  */
 const emojis = ['😀', '😃', '😄', '😁', '😆', '😅', '🤣', '😂', '🙂', '🙃', '😊', '😇', '🥰', '😍', '🤩', '😘', '😗', '😚', '😙', '😋', '😛', '😜', '🤪', '😝', '🤑', '🤗', '🤭', '🤫', '🤔', '🤐', '🤨', '😐', '😑', '😶', '😶', '😏', '😒', '🙄', '😬', '😮', '🤥', '😌', '😔', '😪', '🤤', '😴', '😷', '🤒', '🤕', '🤢', '🤮', '🤧', '🥵', '🥶', '🥴', '😵', '😵', '🤯', '🤠', '🥳', '😎', '🤓', '🧐', '😟', '🙁', '☹️', '😮', '😯', '😲', '😳', '🥺', '😧', '😨', '😰', '😥', '😢', '😭', '😱', '😖', '😣', '😞', '😓', '😩', '😫', '🥱', '😤'];
 let cartasDoJogo = [];
-var dificuldade = 10;
+let dificuldade = 10;
+let minutos = 0;
+let segundos = 0;
+let cronometro = undefined;
+let movimentos = 0;
 
 
 const sortear = () => {
@@ -27,7 +31,6 @@ const sortear = () => {
 
 const getEmoji = () => {
   const listaEmojis = embaralhar(emojis);
-  //const randomIndex = Math.floor(Math.random() * emojis.length);
   return listaEmojis.slice(0, dificuldade);
 }
 
@@ -41,19 +44,39 @@ const getYugioh = () => {
 
 window.onload = () => {
   sessionStorage.removeItem('idCarta')
-  //console.log(numeros);
   selecionarTema('pokemon');
-  //criarCartas(sortearCartas(cartasDoJogo));
-
-  //criarCartasPokemons(sortearCartas(sortear()));
-  showCurrentYear();
 
   sessionStorage.setItem('score', '0');
+
+  document.getElementById("moves").innerHTML = 0;
 
   const highscore = localStorage.getItem('highscore');
   if (highscore == null) {
     localStorage.setItem('highscore', '0');
   }
+}
+
+function iniciarCronometro() {
+  cronometro = setInterval(function () {
+    segundos++;
+    if (segundos == 60) {
+      segundos = 0;
+      minutos++;
+    }
+    exibirTempo();
+    if (minutos === 99 && segundos === 99) {
+      clearInterval(cronometro);
+    }
+  }, 1000);
+}
+
+function exibirTempo() {
+  var tempo = formatarTempo(minutos) + ":" + formatarTempo(segundos);
+  document.getElementById("time").innerHTML = tempo;
+}
+
+function formatarTempo(valor) {
+  return valor < 10 ? "0" + valor : valor;
 }
 
 const selecionarTema = (temaSelecionado) => {
@@ -69,16 +92,6 @@ const selecionarTema = (temaSelecionado) => {
   }
 
   criarCartasPokemons(sortearCartas(cartasDoJogo));
-}
-
-const showCurrentYear = () => {
-  const currentYear = getCurrentYear();
-  document.getElementById('currentYear').innerText = currentYear;
-}
-
-const getCurrentYear = () => {
-  const date = new Date();
-  return date.getFullYear();
 }
 
 const embaralhar = (lista) => {
@@ -163,6 +176,10 @@ const virarCartaParaCima = (carta) => { carta.setAttribute('data-active', 'on') 
 const virouUmaCarta = () => { return sessionStorage.getItem('idCarta') !== null };
 
 const virarCarta = (carta) => {
+  if (cronometro === undefined) {
+    iniciarCronometro();
+  }
+
   const idCartaAtual = carta.getAttribute('data-index');
 
   const cartaEstaComFaceParaCima = carta.getAttribute('data-active') === 'on';
@@ -177,6 +194,9 @@ const virarCarta = (carta) => {
     return;
   }
 
+  movimentos++;
+  document.getElementById("moves").innerHTML = movimentos;
+
   const listaCartas = document.getElementById('cardLocations').children;
 
   const idPrimeiraCarta = sessionStorage.getItem('idCarta');
@@ -185,7 +205,6 @@ const virarCarta = (carta) => {
       desvirarCartas(listaCartas, [idPrimeiraCarta, idCartaAtual]);
 
       let score = Number(sessionStorage.getItem('score'));
-      console.log(score);
       if (score > 0) {
         score -= 1;
       }
@@ -214,8 +233,9 @@ const virarCarta = (carta) => {
       localStorage.setItem('highscore', score);
     }
 
-    adicionarPontuacaoGlobal('Fulaninho', score);
-    adicionarPontuacaoLocal('Fulaninho', score);
+    const tempo = `${String(minutos).padStart(2, '0')}:${String(segundos).padStart(2, '0')}`;
+    adicionarPontuacaoGlobal('Fulaninho', score, tempo, movimentos);
+    adicionarPontuacaoLocal('Fulaninho', score, tempo, movimentos);
 
     alternarVisualizacaoMensagemSucesso();
   }
@@ -232,8 +252,8 @@ const consultarPontuacoesGlobais = async () => {
   return await res.json();
 }
 
-const adicionarPontuacaoGlobal = (nome, pontos) => {
-  fetch(`${API}/pontuacao?nome=${nome}&pontos=${pontos}`, {
+const adicionarPontuacaoGlobal = (nome, pontos, tempo, movimentos) => {
+  fetch(`${API}/pontuacao?nome=${nome}&pontos=${pontos}&tempo=${tempo}&movimentos=${movimentos}`, {
     method: 'POST',
     headers: { "Content-type": "application/json; charset=UTF-8" }
   });
@@ -249,11 +269,11 @@ const consultarPontuacoesLocais = () => {
   return JSON.parse(pontuacoesLocalStorage);
 }
 
-const adicionarPontuacaoLocal = (nome, pontos) => {
+const adicionarPontuacaoLocal = (nome, pontos, tempo, movimentos) => {
   const MAXIMO_PONTUACOES = 10;
 
   let pontuacoes = consultarPontuacoesLocais();
-  pontuacoes.push({ nome, pontos });
+  pontuacoes.push({ nome, pontos, tempo, movimentos });
   pontuacoes.sort((p1, p2) => { p1.pontos - p2.pontos })
   pontuacoes = pontuacoes.slice(0, MAXIMO_PONTUACOES);
 

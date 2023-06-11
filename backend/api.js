@@ -1,13 +1,13 @@
 const MAXIMO_PONTUACOES = 10;
 let pontuacoes = [
-  novaPontuacao('Deyvid', -1),
-  novaPontuacao('Djavan', 10),
-  novaPontuacao('Nathãn', 8),
-  novaPontuacao('Wendy', 9),
+  novaPontuacao('Deyvid', -1, '10:01', 20),
+  novaPontuacao('Djavan', 10, 2, '10:01', 30),
+  novaPontuacao('Nathãn', 8, 3, '10:01', 40),
+  novaPontuacao('Wendy', 9, 4, '10:01', 22),
 ];
 
-function novaPontuacao(nome, pontos) {
-  return { nome, pontos };
+function novaPontuacao(nome, pontos, tempo, movimentos) {
+  return { nome, pontos, tempo, movimentos };
 }
 
 function adicionarPontuacao(pontuacao) {
@@ -25,6 +25,14 @@ function validarPostPontuacao(query) {
 
   if (query.pontos == undefined) {
     erros.push('Pontos não foi informado');
+  }
+
+  if (query.tempo == undefined) {
+    erros.push('Tempo não foi informado');
+  }
+
+  if (query.movimentos == undefined) {
+    erros.push('Movimentos não foi informado');
   }
 
   return erros;
@@ -45,7 +53,9 @@ function setup(app, port) {
 
     const nome = req.query.nome;
     const pontos = req.query.pontos;
-    const pontuacao = novaPontuacao(nome, parseInt(pontos));
+    const tempo = req.query.tempo;
+    const movimentos = req.query.movimentos;
+    const pontuacao = novaPontuacao(nome, parseInt(pontos), tempo, movimentos);
 
     adicionarPontuacao(pontuacao);
 
