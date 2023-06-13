@@ -1,4 +1,4 @@
-"use strict";
+ "use strict";
 
 const API = "http://localhost:3000";
 
@@ -52,7 +52,7 @@ const getAnimais = () => {
 
 window.onload = () => {
   sessionStorage.removeItem('idCarta')
-  selecionarTema('pokemon');
+  selecionarTema('animais');
 
   sessionStorage.setItem('score', '0');
 
@@ -94,15 +94,12 @@ const selecionarTema = (temaSelecionado) => {
   }
   else if (temaSelecionado == 'pokemon') {
     cartasDoJogo = [...getPokemon()];
+    criarCartasPokemons(sortearCartas(cartasDoJogo));
   }
   else if (temaSelecionado == 'animais') {
     cartasDoJogo = [...getAnimais()];
+    criarCartasAnimais(sortearCartas(cartasDoJogo));
   }
-  else {
-    cartasDoJogo = [...getYugioh()];
-  }
-  criarCartasAnimais(sortearCartas(cartasDoJogo));
- // criarCartasPokemons(sortearCartas(cartasDoJogo));
 }
 
 const embaralhar = (lista) => {
@@ -158,7 +155,7 @@ const criarCartasAnimais = (cartas) => {
   for (const carta of cartas) {
     const novaCarta = criarNovaCarta(
       carta['id'],
-      `<img src="./assets/images/mona-loading-dimmed.gif " alt="" width="50%">`,
+      `<img src="./assets/images/pata.png " alt="" width="50%">`,
       `<img src="./assets/images/doc/${carta['carta']}.png" alt="" class="card-icon" width="50%">`
     );
     document.getElementById('cardLocations').innerHTML += novaCarta;
