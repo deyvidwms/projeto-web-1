@@ -38,9 +38,17 @@ const getPokemon = () => {
   return sortear();
 }
 
-const getYugioh = () => {
+const getAnimais = () => {
+  const quantidadeCartas = dificuldade;
+  const cartas = [];
+  for (let i = 1; i <= 42; i++) {
+    cartas.push(i);
+  }
 
+  return embaralhar(cartas).slice(0, quantidadeCartas);
 }
+
+
 
 window.onload = () => {
   sessionStorage.removeItem('idCarta')
@@ -87,11 +95,14 @@ const selecionarTema = (temaSelecionado) => {
   else if (temaSelecionado == 'pokemon') {
     cartasDoJogo = [...getPokemon()];
   }
+  else if (temaSelecionado == 'animais') {
+    cartasDoJogo = [...getAnimais()];
+  }
   else {
     cartasDoJogo = [...getYugioh()];
   }
-
-  criarCartasPokemons(sortearCartas(cartasDoJogo));
+  criarCartasAnimais(sortearCartas(cartasDoJogo));
+ // criarCartasPokemons(sortearCartas(cartasDoJogo));
 }
 
 const embaralhar = (lista) => {
@@ -142,6 +153,18 @@ const criarCartasPokemons = (cartas) => {
     document.getElementById('cardLocations').innerHTML += novaCarta;
   }
 }
+
+const criarCartasAnimais = (cartas) => {
+  for (const carta of cartas) {
+    const novaCarta = criarNovaCarta(
+      carta['id'],
+      `<img src="./assets/images/mona-loading-dimmed.gif " alt="" width="50%">`,
+      `<img src="./assets/images/doc/${carta['carta']}.png" alt="" class="card-icon" width="50%">`
+    );
+    document.getElementById('cardLocations').innerHTML += novaCarta;
+  }
+}
+
 
 const desvirarCartas = (cartas, idsCartas) => {
   for (const carta of cartas) {
