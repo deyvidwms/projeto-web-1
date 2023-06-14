@@ -16,15 +16,17 @@
 		integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
 		crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-	<link rel="stylesheet" href="./assets/css/global.css">
+		<link rel="stylesheet" href="./assets/css/global.css">
+		<link rel="stylesheet" href="./assets/css/init-game.css">
 	<link rel="stylesheet" href="./assets/css/header.css">
 	<link rel="stylesheet" href="./assets/css/footer.css">
 	<link rel="stylesheet" href="./assets/css/card.css">
 
+	<script src="./assets/js/toggleEffects.js" defer></script>
 	<script src="./assets/js/script.js" defer></script>
 </head>
 
-<body>
+<body style="overflow: hidden;">
 	<div class="container">
 		<header>
 			<div class="logo">
@@ -61,6 +63,84 @@
 			<div class="card-list" id="cardLocations"></div>
 		</div>
 	</div>
+
+	<div class="container--init-game">
+		<video src="./assets/videos/video.mp4" autoplay loop muted></video>
+		<div class="init-game--content">
+			<div class="content--title">
+				<h1 class="title">Jogo da Memória</h1>
+			</div>
+
+			<div class="content--tabs">
+				<div class="tabs init-rank ">
+					<button class="button" onclick="novoJogo()">Novo Jogo</button>		
+					<button class="button">Ranking</button>
+				</div>
+				<div class="tabs options-game active">
+					<div class="options-game">
+						<h3>Selecione um Tema: <span>*</span></h3>
+						<div class="options-game--theme-options">
+							<div 
+								class="theme-option"
+								data-type="emoji" 
+								onclick="selecionarTema(this)"
+							>
+								Emoji
+							</div>		
+							<div 
+								class="theme-option"
+								data-type="pokemon" 
+								onclick="selecionarTema(this)"
+							>
+								Pokemon
+							</div>		
+							<div 
+								class="theme-option"
+								data-type="animais" 
+								onclick="selecionarTema(this)"
+							>
+								Animais
+							</div>
+						</div>
+						<p id="error-theme">Selecione uma das opções acima.</p>
+					</div>
+					<div class="options-game">
+						<h3>Selecione uma dificuldade: <span>*</span></h3>
+						<div class="options-game--difficulty">
+							<div 
+								class="difficulty-option"
+								data-type="facil"
+								onclick="selecionarDificuldade(this)"
+							>
+								Fácil
+							</div>
+							<div 
+								class="difficulty-option"
+								data-type="medio"
+								onclick="selecionarDificuldade(this)"
+							>
+								Médio
+							</div>
+							<div 
+								class="difficulty-option"
+								data-type="dificil"
+								onclick="selecionarDificuldade(this)"
+							>
+								Difícil
+							</div>
+						</div>
+						<p id="error-difficulty">Selecione uma das opções acima.</p>
+					</div>
+					<div class="options-game--start-game">
+						<button class="button" onclick="iniciarJogo()">Iniciar Jogo</button>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+	
+
 
 	<div class="success-message-mask" onclick="closeSuccessMessage()"></div>
 	<div class="success-message">

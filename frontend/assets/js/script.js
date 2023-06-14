@@ -1,4 +1,4 @@
- "use strict";
+"use strict";
 
 const API = "http://localhost:3000";
 
@@ -18,6 +18,100 @@ let cronometro = undefined;
 let movimentos = 0;
 
 
+window.onload = () => {
+  sessionStorage.removeItem('idCarta');
+  sessionStorage.removeItem('temaSelecionado');
+  sessionStorage.removeItem('dificuldadeSelecionada');
+
+  sessionStorage.setItem('score', '0');
+
+  document.getElementById("moves").innerHTML = 0;
+
+  const highscore = localStorage.getItem('highscore');
+  if (highscore == null) {
+    localStorage.setItem('highscore', '0');
+  }
+}
+
+const novoJogo = () => {
+  const elmInitRank = document.getElementsByClassName('init-rank')[0];
+  slideUp(elmInitRank, 500);
+
+  setTimeout(() => {
+    elmInitRank.setAttribute('class', 'tabs init-rank');
+
+    setTimeout(() => {
+      const elmOptionsGame = document.getElementsByClassName('options-game')[0];
+      slideDown(elmOptionsGame, 500);
+      setTimeout(() => { elmOptionsGame.setAttribute('tabs options-game active') }, 500)
+    }, 500);
+  }, 500);
+}
+
+const selecionarTema = (element) => {
+  const themeOptions = document.getElementsByClassName('theme-option');
+
+  for (let themeOption of themeOptions) {
+    themeOption.setAttribute('class', 'theme-option');
+  }
+
+  element.setAttribute('class', 'theme-option active')
+
+  sessionStorage.setItem('temaSelecionado', element.getAttribute('data-type'))
+
+  slideUp(document.getElementById('error-theme'), 500);
+}
+
+const selecionarDificuldade = (element) => {
+  const difficultyOptions = document.getElementsByClassName('difficulty-option');
+
+  for (let difficultyOption of difficultyOptions) {
+    difficultyOption.setAttribute('class', 'difficulty-option');
+  }
+
+  element.setAttribute('class', 'difficulty-option active')
+
+  sessionStorage.setItem('dificuldadeSelecionada', element.getAttribute('data-type'))
+
+  slideUp(document.getElementById('error-difficulty'), 500);
+}
+
+const iniciarJogo = () => {
+  const temaSelecionado = sessionStorage.getItem('temaSelecionado') || null;
+  const dificuldadeSelecionada = sessionStorage.getItem('dificuldadeSelecionada') || null;
+
+  if (temaSelecionado != null && dificuldadeSelecionada != null) {
+    if ( dificuldade === 'facil') {
+      dificuldade = 10;
+    } else if ( dificuldade === 'medio' ) {
+      dificuldade = 15;
+    } else if ( dificuldade === 'dificil' ) {
+      dificuldade = 20;
+    }
+      
+    if (temaSelecionado === 'emoji') {
+      cartasDoJogo = [...getEmoji()];
+      criarCartas(sortearCartas(cartasDoJogo));
+    } else if (temaSelecionado === 'pokemon') {
+      cartasDoJogo = [...getPokemon()];
+      criarCartasPokemons(sortearCartas(cartasDoJogo));
+    } else if (temaSelecionado === 'animais') {
+      cartasDoJogo = [...getAnimais()];
+      criarCartasAnimais(sortearCartas(cartasDoJogo));
+    }
+
+    document.getElementsByClassName('container--init-game')[0].style.display = 'none';
+  } else {
+    if (temaSelecionado == null) {
+      slideDown(document.getElementById('error-theme'), 500);
+    }
+
+    if (dificuldadeSelecionada == null) {
+      slideDown(document.getElementById('error-difficulty'), 500);
+    }
+  }
+}
+
 const sortear = () => {
   const numerosSorteados = [];
 
@@ -27,7 +121,6 @@ const sortear = () => {
 
   return embaralhar(numerosSorteados).slice(0, dificuldade);
 }
-
 
 const getEmoji = () => {
   const listaEmojis = embaralhar(emojis);
@@ -46,22 +139,6 @@ const getAnimais = () => {
   }
 
   return embaralhar(cartas).slice(0, quantidadeCartas);
-}
-
-
-
-window.onload = () => {
-  sessionStorage.removeItem('idCarta')
-  selecionarTema('animais');
-
-  sessionStorage.setItem('score', '0');
-
-  document.getElementById("moves").innerHTML = 0;
-
-  const highscore = localStorage.getItem('highscore');
-  if (highscore == null) {
-    localStorage.setItem('highscore', '0');
-  }
 }
 
 function iniciarCronometro() {
@@ -85,21 +162,6 @@ function exibirTempo() {
 
 function formatarTempo(valor) {
   return valor < 10 ? "0" + valor : valor;
-}
-
-const selecionarTema = (temaSelecionado) => {
-  if (temaSelecionado == 'emoji') {
-    cartasDoJogo = [...getEmoji()];
-    criarCartas(sortearCartas(cartasDoJogo));
-  }
-  else if (temaSelecionado == 'pokemon') {
-    cartasDoJogo = [...getPokemon()];
-    criarCartasPokemons(sortearCartas(cartasDoJogo));
-  }
-  else if (temaSelecionado == 'animais') {
-    cartasDoJogo = [...getAnimais()];
-    criarCartasAnimais(sortearCartas(cartasDoJogo));
-  }
 }
 
 const embaralhar = (lista) => {
@@ -132,6 +194,7 @@ const criarNovaCarta = (idCarta, frente, verso) => {
 }
 
 const criarCartas = (cartas) => {
+  document.getElementById('cardLocations').innerHTML = '';
   for (const carta of cartas) {
     const novaCarta = criarNovaCarta(
       carta['id'],
