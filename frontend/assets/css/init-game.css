@@ -43,7 +43,7 @@
 }
 
 .content--tabs > .tabs.active {
-  display: flex;
+  display: flex !important;
 }
 
 .content--tabs > .tabs.options-game > .options-game--start-game > .button,
@@ -71,7 +71,7 @@
 }
 
 .content--tabs > .tabs.options-game {
-  display: flex;
+  display: none;
   flex-direction: column;
 }
 

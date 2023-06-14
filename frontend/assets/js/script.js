@@ -43,7 +43,7 @@ const novoJogo = () => {
     setTimeout(() => {
       const elmOptionsGame = document.getElementsByClassName('options-game')[0];
       slideDown(elmOptionsGame, 500);
-      setTimeout(() => { elmOptionsGame.setAttribute('tabs options-game active') }, 500)
+      setTimeout(() => { elmOptionsGame.setAttribute('class', 'tabs options-game active') }, 500)
     }, 500);
   }, 500);
 }
