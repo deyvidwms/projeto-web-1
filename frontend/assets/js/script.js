@@ -11,7 +11,7 @@ const API = "http://localhost:3000";
  */
 const emojis = ['😀', '😃', '😄', '😁', '😆', '😅', '🤣', '😂', '🙂', '🙃', '😊', '😇', '🥰', '😍', '🤩', '😘', '😗', '😚', '😙', '😋', '😛', '😜', '🤪', '😝', '🤑', '🤗', '🤭', '🤫', '🤔', '🤐', '🤨', '😐', '😑', '😶', '😶', '😏', '😒', '🙄', '😬', '😮', '🤥', '😌', '😔', '😪', '🤤', '😴', '😷', '🤒', '🤕', '🤢', '🤮', '🤧', '🥵', '🥶', '🥴', '😵', '😵', '🤯', '🤠', '🥳', '😎', '🤓', '🧐', '😟', '🙁', '☹️', '😮', '😯', '😲', '😳', '🥺', '😧', '😨', '😰', '😥', '😢', '😭', '😱', '😖', '😣', '😞', '😓', '😩', '😫', '🥱', '😤'];
 let cartasDoJogo = [];
-let dificuldade = 10;
+let dificuldade = 5;
 let minutos = 0;
 let segundos = 0;
 let cronometro = undefined;
@@ -43,6 +43,7 @@ const novoJogo = () => {
     setTimeout(() => {
       const elmOptionsGame = document.getElementsByClassName('options-game')[0];
       slideDown(elmOptionsGame, 500);
+      elmOptionsGame.style.display = 'flex';
       setTimeout(() => { elmOptionsGame.setAttribute('class', 'tabs options-game active') }, 500)
     }, 500);
   }, 500);
@@ -77,19 +78,24 @@ const selecionarDificuldade = (element) => {
 }
 
 const iniciarJogo = () => {
+  const bodyElm = document.getElementsByTagName('body')[0];
+  bodyElm.removeAttribute('style');
+
   const temaSelecionado = sessionStorage.getItem('temaSelecionado') || null;
   const dificuldadeSelecionada = sessionStorage.getItem('dificuldadeSelecionada') || null;
 
   if (temaSelecionado != null && dificuldadeSelecionada != null) {
-    if ( dificuldade === 'facil') {
+    if ( dificuldadeSelecionada === 'facil') {
+      dificuldade = 4;
+    } else if ( dificuldadeSelecionada === 'medio' ) {
+      dificuldade = 8;
+    } else if ( dificuldadeSelecionada === 'dificil' ) {
       dificuldade = 10;
-    } else if ( dificuldade === 'medio' ) {
-      dificuldade = 15;
-    } else if ( dificuldade === 'dificil' ) {
-      dificuldade = 20;
+      document.getElementById('cardLocations').style.gridTemplateColumns = 'repeat(5, 1fr)';
     }
       
     if (temaSelecionado === 'emoji') {
+      console.log('entrou aqui')
       cartasDoJogo = [...getEmoji()];
       criarCartas(sortearCartas(cartasDoJogo));
     } else if (temaSelecionado === 'pokemon') {
@@ -101,6 +107,7 @@ const iniciarJogo = () => {
     }
 
     document.getElementsByClassName('container--init-game')[0].style.display = 'none';
+
   } else {
     if (temaSelecionado == null) {
       slideDown(document.getElementById('error-theme'), 500);
@@ -123,6 +130,7 @@ const sortear = () => {
 }
 
 const getEmoji = () => {
+  console.log('estou dentro de emoji e a dificuldade eh', dificuldade)
   const listaEmojis = embaralhar(emojis);
   return listaEmojis.slice(0, dificuldade);
 }
