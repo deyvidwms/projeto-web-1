@@ -34,11 +34,11 @@ window.onload = () => {
 }
 
 const novoJogo = () => {
-  const elmInitRank = document.getElementsByClassName('init-rank')[0];
-  slideUp(elmInitRank, 500);
+  const elmInitRanking = document.getElementsByClassName('init-ranking')[0];
+  slideUp(elmInitRanking, 500);
 
   setTimeout(() => {
-    elmInitRank.setAttribute('class', 'tabs init-rank');
+    elmInitRanking.setAttribute('class', 'tabs init-ranking');
 
     setTimeout(() => {
       const elmOptionsGame = document.getElementsByClassName('options-game')[0];
@@ -117,6 +117,58 @@ const iniciarJogo = () => {
       slideDown(document.getElementById('error-difficulty'), 500);
     }
   }
+}
+
+const visualizarRanking = () => {
+  const elmInitRanking = document.getElementsByClassName('init-ranking')[0];
+  slideUp(elmInitRanking, 500);
+
+  setTimeout(() => {
+    elmInitRanking.setAttribute('class', 'tabs init-ranking');
+
+    setTimeout(() => {
+      const elmOptionsGame = document.getElementsByClassName('ranking')[0];
+      slideDown(elmOptionsGame, 500);
+      elmOptionsGame.style.display = 'flex';
+      setTimeout(() => { elmOptionsGame.setAttribute('class', 'tabs ranking active') }, 500)
+    }, 500);
+  }, 500);
+}
+
+const selecionarTipoRanking = (element) => {
+  const rankOptions = document.getElementsByClassName('ranking-option');
+
+  for (let rankOption of rankOptions) {
+    rankOption.setAttribute('class', 'ranking-option');
+  }
+
+  element.setAttribute('class', 'ranking-option active')
+}
+
+const selecionarDificuldadeRanking = (element) => {
+  const rankDifficulties = document.getElementsByClassName('ranking-difficulty');
+
+  for (let rankDifficulty of rankDifficulties) {
+    rankDifficulty.setAttribute('class', 'ranking-difficulty');
+  }
+
+  element.setAttribute('class', 'ranking-difficulty active');
+}
+
+const voltarAbaJogo = () => {
+  const elmOptionsGame = document.getElementsByClassName('ranking')[0];
+  slideUp(elmOptionsGame, 500);
+  
+  setTimeout(() => {
+    elmOptionsGame.setAttribute('class', 'tabs ranking');
+    
+    setTimeout(() => {
+      const elmInitRanking = document.getElementsByClassName('init-ranking')[0];
+      slideDown(elmInitRanking, 500);
+      elmInitRanking.style.display = 'flex';
+      setTimeout(() => { elmInitRanking.setAttribute('class', 'tabs init-ranking active') }, 500)
+    }, 500);
+  }, 500);
 }
 
 const sortear = () => {
