@@ -41,7 +41,7 @@ const getPokemon = () => {
 const getAnimais = () => {
   const quantidadeCartas = dificuldade;
   const cartas = [];
-  for (let i = 1; i <= 42; i++) {
+  for (let i = 1; i <= 41; i++) {
     cartas.push(i);
   }
 
