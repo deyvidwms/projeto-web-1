@@ -16,15 +16,17 @@
 		integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
 		crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-	<link rel="stylesheet" href="./assets/css/global.css">
+		<link rel="stylesheet" href="./assets/css/global.css">
+		<link rel="stylesheet" href="./assets/css/init-game.css">
 	<link rel="stylesheet" href="./assets/css/header.css">
 	<link rel="stylesheet" href="./assets/css/footer.css">
 	<link rel="stylesheet" href="./assets/css/card.css">
 
+	<script src="./assets/js/toggleEffects.js" defer></script>
 	<script src="./assets/js/script.js" defer></script>
 </head>
 
-<body>
+<body style="overflow: hidden;">
 	<div class="container">
 		<header>
 			<div class="logo">
@@ -48,10 +50,10 @@
 				</div>
 
 				<div class="game-buttons">
-					<div class="button-reload" onclick="window.location.reload()">
+					<div class="button-reload" onclick="iniciarJogo()">
 						<i class="fas fa-redo"></i>
 					</div>
-					<div class="button-exit">
+					<div class="button-exit" onclick="window.location.reload()">
 						<i class="fas fa-sign-out"></i>
 					</div>
 				</div>
@@ -62,18 +64,236 @@
 		</div>
 	</div>
 
-	<div class="success-message-mask" onclick="closeSuccessMessage()"></div>
+	<div class="container--init-game">
+		<!-- <video src="./assets/videos/video.mp4" autoplay loop muted></video> -->
+		<div class="init-game--content">
+			<div class="content--title">
+				<h1 class="title">Jogo da Memória</h1>
+			</div>
+
+			<div class="content--tabs">
+				<div class="tabs init-ranking active">
+					<button class="button" onclick="novoJogo()">Novo Jogo</button>		
+					<button class="button" onclick="visualizarRanking()">Ranking</button>
+				</div>
+				
+				<div class="tabs options-game">
+					<div class="options-game">
+						<h3>Selecione um Tema: <span>*</span></h3>
+						<div class="options-game--theme-options">
+							<div 
+								class="theme-option"
+								data-type="emoji" 
+								onclick="selecionarTema(this)"
+							>
+								Emoji
+							</div>		
+							<div 
+								class="theme-option"
+								data-type="pokemon" 
+								onclick="selecionarTema(this)"
+							>
+								Pokemon
+							</div>		
+							<div 
+								class="theme-option"
+								data-type="animais" 
+								onclick="selecionarTema(this)"
+							>
+								Animais
+							</div>
+						</div>
+						<p id="error-theme">Selecione uma das opções acima.</p>
+					</div>
+					<div class="options-game">
+						<h3>Selecione uma dificuldade: <span>*</span></h3>
+						<div class="options-game--difficulty">
+							<div 
+								class="difficulty-option"
+								data-type="facil"
+								onclick="selecionarDificuldade(this)"
+							>
+								Fácil
+							</div>
+							<div 
+								class="difficulty-option"
+								data-type="medio"
+								onclick="selecionarDificuldade(this)"
+							>
+								Médio
+							</div>
+							<div 
+								class="difficulty-option"
+								data-type="dificil"
+								onclick="selecionarDificuldade(this)"
+							>
+								Difícil
+							</div>
+						</div>
+						<p id="error-difficulty">Selecione uma das opções acima.</p>
+					</div>
+					<div class="options-game--start-game">
+						<button class="button" onclick="iniciarJogo()">Iniciar Jogo</button>
+					</div>
+				</div>
+
+				<div class="tabs ranking">
+					<div class="ranking">
+						<h3 class="ranking--ranking-title">Highscore</h3>
+						<div class="ranking--ranking-options">
+							<div 
+								class="ranking-option active"
+								data-type="local"
+								onclick="selecionarTipoRanking(this)"	
+							>
+								Pontos
+							</div>
+							<div 
+								class="ranking-option"
+								data-type="global"
+								onclick="selecionarTipoRanking(this)"
+							>
+								Tempo
+							</div>
+						</div>
+						<div class="ranking--ranking-difficulty">
+							<div 
+								class="ranking-difficulty active"
+								data-type="facil"
+								onclick="selecionarDificuldadeRanking(this)"	
+							>
+								Fácil
+							</div>
+							<div 
+								class="ranking-difficulty"
+								data-type="medio"
+								onclick="selecionarDificuldadeRanking(this)"
+							>
+								Médio
+							</div>
+							<div 
+								class="ranking-difficulty"
+								data-type="dificil"
+								onclick="selecionarDificuldadeRanking(this)"
+							>
+								Difícil
+							</div>
+						</div>
+						<div class="ranking--ranking-content">
+							<div class="ranking-content--option">
+								<div class="option--position-name">
+									<p>1.</p>
+									<p>ABC</p>
+								</div>
+								<div class="option--points">
+									<p>100pts</p>
+								</div>
+							</div>
+							
+							<div class="ranking-content--option">
+								<div class="option--position-name">
+									<p>2.</p>
+									<p>ABC</p>
+								</div>
+								<div class="option--points">
+									<p>100pts</p>
+								</div>
+							</div>
+							<div class="ranking-content--option">
+								<div class="option--position-name">
+									<p>3.</p>
+									<p>ABC</p>
+								</div>
+								<div class="option--points">
+									<p>100pts</p>
+								</div>
+							</div>
+							<div class="ranking-content--option">
+								<div class="option--position-name">
+									<p>4.</p>
+									<p>ABC</p>
+								</div>
+								<div class="option--points">
+									<p>100pts</p>
+								</div>
+							</div>
+							<div class="ranking-content--option">
+								<div class="option--position-name">
+									<p>5.</p>
+									<p>ABC</p>
+								</div>
+								<div class="option--points">
+									<p>100pts</p>
+								</div>
+							</div>
+							<div class="ranking-content--option">
+								<div class="option--position-name">
+									<p>6.</p>
+									<p>ABC</p>
+								</div>
+								<div class="option--points">
+									<p>100pts</p>
+								</div>
+							</div>
+							<div class="ranking-content--option">
+								<div class="option--position-name">
+									<p>7.</p>
+									<p>ABC</p>
+								</div>
+								<div class="option--points">
+									<p>100pts</p>
+								</div>
+							</div>
+							<div class="ranking-content--option">
+								<div class="option--position-name">
+									<p>8.</p>
+									<p>ABC</p>
+								</div>
+								<div class="option--points">
+									<p>100pts</p>
+								</div>
+							</div>
+							<div class="ranking-content--option">
+								<div class="option--position-name">
+									<p>9.</p>
+									<p>ABC</p>
+								</div>
+								<div class="option--points">
+									<p>100pts</p>
+								</div>
+							</div>
+							<div class="ranking-content--option">
+								<div class="option--position-name">
+									<p>10.</p>
+									<p>ABC</p>
+								</div>
+								<div class="option--points">
+									<p>100pts</p>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="ranking--previous-tab">
+						<button class="button" onclick="voltarAbaJogo()">Voltar</button>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+	
+
+
 	<div class="success-message">
-		<h1>Parabéns!</h1>
-		<h2>Você concluiu o nível <span id="nivel">Fácil</span>!</h2>
-		<h2>Que tal aumentar o desafio mudando a dificuldade?</h2>
-
-		<img src="./assets/images/mona-loading-dimmed.gif" alt="Gif do GitHub">
-
-		<div class="success-message--select-difficulty">
-			<button>Jogar Novamente</button>
-            <button>Ranking</button>
-            <button>Voltar ao Menu</button>
+		<div class="success-message--content">
+			<h1>Parabéns!</h1>
+			<h3>Você conseguiu encontrar todas as peças!</h3>
+			<img src="./assets/images/mona-loading-dimmed.gif" alt="Boneco do Git">
+			<p>Digite suas iniciais no campo abaixo.</p>
+			<input type="text" maxlength="3">
+			<p>Pontos: <span id="qtdPontos">0</span></p>
+			<button>Enviar</button>
 		</div>
 	</div>
 </body>

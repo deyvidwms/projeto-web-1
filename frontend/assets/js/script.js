@@ -1,4 +1,4 @@
- "use strict";
+"use strict";
 
 const API = "http://localhost:3000";
 
@@ -11,12 +11,165 @@ const API = "http://localhost:3000";
  */
 const emojis = ['😀', '😃', '😄', '😁', '😆', '😅', '🤣', '😂', '🙂', '🙃', '😊', '😇', '🥰', '😍', '🤩', '😘', '😗', '😚', '😙', '😋', '😛', '😜', '🤪', '😝', '🤑', '🤗', '🤭', '🤫', '🤔', '🤐', '🤨', '😐', '😑', '😶', '😶', '😏', '😒', '🙄', '😬', '😮', '🤥', '😌', '😔', '😪', '🤤', '😴', '😷', '🤒', '🤕', '🤢', '🤮', '🤧', '🥵', '🥶', '🥴', '😵', '😵', '🤯', '🤠', '🥳', '😎', '🤓', '🧐', '😟', '🙁', '☹️', '😮', '😯', '😲', '😳', '🥺', '😧', '😨', '😰', '😥', '😢', '😭', '😱', '😖', '😣', '😞', '😓', '😩', '😫', '🥱', '😤'];
 let cartasDoJogo = [];
-let dificuldade = 10;
+let dificuldade = 5;
 let minutos = 0;
 let segundos = 0;
 let cronometro = undefined;
 let movimentos = 0;
 
+
+window.onload = () => {
+  sessionStorage.removeItem('idCarta');
+  sessionStorage.removeItem('temaSelecionado');
+  sessionStorage.removeItem('dificuldadeSelecionada');
+
+  sessionStorage.setItem('score', '0');
+
+  document.getElementById("moves").innerHTML = 0;
+
+  const highscore = localStorage.getItem('highscore');
+  if (highscore == null) {
+    localStorage.setItem('highscore', '0');
+  }
+}
+
+const novoJogo = () => {
+  const elmInitRanking = document.getElementsByClassName('init-ranking')[0];
+  slideUp(elmInitRanking, 500);
+
+  setTimeout(() => {
+    elmInitRanking.setAttribute('class', 'tabs init-ranking');
+
+    setTimeout(() => {
+      const elmOptionsGame = document.getElementsByClassName('options-game')[0];
+      slideDown(elmOptionsGame, 500);
+      elmOptionsGame.style.display = 'flex';
+      setTimeout(() => { elmOptionsGame.setAttribute('class', 'tabs options-game active') }, 500)
+    }, 500);
+  }, 500);
+}
+
+const selecionarTema = (element) => {
+  const themeOptions = document.getElementsByClassName('theme-option');
+
+  for (let themeOption of themeOptions) {
+    themeOption.setAttribute('class', 'theme-option');
+  }
+
+  element.setAttribute('class', 'theme-option active')
+
+  sessionStorage.setItem('temaSelecionado', element.getAttribute('data-type'))
+
+  slideUp(document.getElementById('error-theme'), 500);
+}
+
+const selecionarDificuldade = (element) => {
+  const difficultyOptions = document.getElementsByClassName('difficulty-option');
+
+  for (let difficultyOption of difficultyOptions) {
+    difficultyOption.setAttribute('class', 'difficulty-option');
+  }
+
+  element.setAttribute('class', 'difficulty-option active')
+
+  sessionStorage.setItem('dificuldadeSelecionada', element.getAttribute('data-type'))
+
+  slideUp(document.getElementById('error-difficulty'), 500);
+}
+
+const iniciarJogo = () => {
+  const bodyElm = document.getElementsByTagName('body')[0];
+  bodyElm.removeAttribute('style');
+
+  const temaSelecionado = sessionStorage.getItem('temaSelecionado') || null;
+  const dificuldadeSelecionada = sessionStorage.getItem('dificuldadeSelecionada') || null;
+
+  if (temaSelecionado != null && dificuldadeSelecionada != null) {
+    if ( dificuldadeSelecionada === 'facil') {
+      dificuldade = 4;
+    } else if ( dificuldadeSelecionada === 'medio' ) {
+      dificuldade = 8;
+    } else if ( dificuldadeSelecionada === 'dificil' ) {
+      dificuldade = 10;
+      document.getElementById('cardLocations').style.gridTemplateColumns = 'repeat(5, 1fr)';
+    }
+      
+    if (temaSelecionado === 'emoji') {
+      console.log('entrou aqui')
+      cartasDoJogo = [...getEmoji()];
+      criarCartas(sortearCartas(cartasDoJogo));
+    } else if (temaSelecionado === 'pokemon') {
+      cartasDoJogo = [...getPokemon()];
+      criarCartasPokemons(sortearCartas(cartasDoJogo));
+    } else if (temaSelecionado === 'animais') {
+      cartasDoJogo = [...getAnimais()];
+      criarCartasAnimais(sortearCartas(cartasDoJogo));
+    }
+
+    document.getElementsByClassName('container--init-game')[0].style.display = 'none';
+
+  } else {
+    if (temaSelecionado == null) {
+      slideDown(document.getElementById('error-theme'), 500);
+    }
+
+    if (dificuldadeSelecionada == null) {
+      slideDown(document.getElementById('error-difficulty'), 500);
+    }
+  }
+}
+
+const visualizarRanking = () => {
+  const elmInitRanking = document.getElementsByClassName('init-ranking')[0];
+  slideUp(elmInitRanking, 500);
+
+  setTimeout(() => {
+    elmInitRanking.setAttribute('class', 'tabs init-ranking');
+
+    setTimeout(() => {
+      const elmOptionsGame = document.getElementsByClassName('ranking')[0];
+      slideDown(elmOptionsGame, 500);
+      elmOptionsGame.style.display = 'flex';
+      setTimeout(() => { elmOptionsGame.setAttribute('class', 'tabs ranking active') }, 500)
+    }, 500);
+  }, 500);
+}
+
+const selecionarTipoRanking = (element) => {
+  const rankOptions = document.getElementsByClassName('ranking-option');
+
+  for (let rankOption of rankOptions) {
+    rankOption.setAttribute('class', 'ranking-option');
+  }
+
+  element.setAttribute('class', 'ranking-option active')
+}
+
+const selecionarDificuldadeRanking = (element) => {
+  const rankDifficulties = document.getElementsByClassName('ranking-difficulty');
+
+  for (let rankDifficulty of rankDifficulties) {
+    rankDifficulty.setAttribute('class', 'ranking-difficulty');
+  }
+
+  element.setAttribute('class', 'ranking-difficulty active');
+}
+
+const voltarAbaJogo = () => {
+  const elmOptionsGame = document.getElementsByClassName('ranking')[0];
+  slideUp(elmOptionsGame, 500);
+  
+  setTimeout(() => {
+    elmOptionsGame.setAttribute('class', 'tabs ranking');
+    
+    setTimeout(() => {
+      const elmInitRanking = document.getElementsByClassName('init-ranking')[0];
+      slideDown(elmInitRanking, 500);
+      elmInitRanking.style.display = 'flex';
+      setTimeout(() => { elmInitRanking.setAttribute('class', 'tabs init-ranking active') }, 500)
+    }, 500);
+  }, 500);
+}
 
 const sortear = () => {
   const numerosSorteados = [];
@@ -28,8 +181,8 @@ const sortear = () => {
   return embaralhar(numerosSorteados).slice(0, dificuldade);
 }
 
-
 const getEmoji = () => {
+  console.log('estou dentro de emoji e a dificuldade eh', dificuldade)
   const listaEmojis = embaralhar(emojis);
   return listaEmojis.slice(0, dificuldade);
 }
@@ -46,22 +199,6 @@ const getAnimais = () => {
   }
 
   return embaralhar(cartas).slice(0, quantidadeCartas);
-}
-
-
-
-window.onload = () => {
-  sessionStorage.removeItem('idCarta')
-  selecionarTema('animais');
-
-  sessionStorage.setItem('score', '0');
-
-  document.getElementById("moves").innerHTML = 0;
-
-  const highscore = localStorage.getItem('highscore');
-  if (highscore == null) {
-    localStorage.setItem('highscore', '0');
-  }
 }
 
 function iniciarCronometro() {
@@ -85,21 +222,6 @@ function exibirTempo() {
 
 function formatarTempo(valor) {
   return valor < 10 ? "0" + valor : valor;
-}
-
-const selecionarTema = (temaSelecionado) => {
-  if (temaSelecionado == 'emoji') {
-    cartasDoJogo = [...getEmoji()];
-    criarCartas(sortearCartas(cartasDoJogo));
-  }
-  else if (temaSelecionado == 'pokemon') {
-    cartasDoJogo = [...getPokemon()];
-    criarCartasPokemons(sortearCartas(cartasDoJogo));
-  }
-  else if (temaSelecionado == 'animais') {
-    cartasDoJogo = [...getAnimais()];
-    criarCartasAnimais(sortearCartas(cartasDoJogo));
-  }
 }
 
 const embaralhar = (lista) => {
@@ -132,6 +254,7 @@ const criarNovaCarta = (idCarta, frente, verso) => {
 }
 
 const criarCartas = (cartas) => {
+  document.getElementById('cardLocations').innerHTML = '';
   for (const carta of cartas) {
     const novaCarta = criarNovaCarta(
       carta['id'],

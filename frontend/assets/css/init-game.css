@@ -1,0 +1,236 @@
+.container--init-game {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+}
+
+.container--init-game > video {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%; 
+  height: auto;
+}
+
+.container--init-game > .init-game--content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-image: linear-gradient(120deg ,rgb(0 0 0 / 80%) 60%, rgb(124 15 163 / 50%) 80%), url(../images/background2.jpg);
+  background-size: cover;
+  background-position: center;
+  padding: 100px;
+  padding-top: 200px;
+}
+
+.container--init-game > .init-game--content > .content--title > .title {
+  font-family: 'Kablammo', cursive;
+  font-size: 5rem;
+  color: #FFF;
+  margin-bottom: 64px;
+}
+
+.content--tabs {
+  display: flex;
+  flex-direction: column;
+}
+
+.content--tabs > .tabs {
+  display: none;
+  gap: 32px;
+}
+
+.content--tabs > .tabs.active {
+  display: flex !important;
+}
+
+.content--tabs > .tabs.options-game > .options-game--start-game > .button,
+.content--tabs > .tabs.init-ranking > .button {
+  display: inline-block;
+  padding: 14px 50px;
+  background-color: transparent;
+  border: 2px solid #FFF;
+  color: #FFF;
+  font-size: 1rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  border-radius: 3px;
+  cursor: pointer;  
+  box-shadow: inset 0 0 0 0 #911eba;
+  -webkit-transition: ease-out 0.4s;
+  -moz-transition: ease-out 0.4s;
+  transition: ease-out 0.4s;
+}
+
+.content--tabs > .tabs.options-game > .options-game--start-game > .button,
+.content--tabs > .tabs.init-ranking > .button:hover {
+  border: 2px solid #911eba;
+  box-shadow: inset 400px 0 0 0 #911eba;
+}
+
+/* opcoes do jogo */
+.content--tabs > .tabs.options-game {
+  display: none;
+  flex-direction: column;
+}
+
+.tabs.options-game > .options-game {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.tabs.options-game > .options-game > h3 {
+  color: #FFF;
+}
+
+.tabs.options-game > .options-game > p {
+  display: none;
+  color: #FFF;
+}
+
+.tabs.options-game > .options-game > .options-game--theme-options,
+.tabs.options-game > .options-game > .options-game--difficulty {
+  display: flex;
+  gap: 32px;
+}
+
+.options-game > .options-game--theme-options > .theme-option,
+.options-game > .options-game--difficulty > .difficulty-option
+ {
+  display: inline-block;
+  padding: 14px 50px;
+  background-color: transparent;
+  border: 2px solid #FFF;
+  color: #FFF;
+  font-size: 1rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  border-radius: 3px;
+  cursor: pointer;  
+  box-shadow: inset 0 0 0 0 #911eba;
+  -webkit-transition: ease-out 0.4s;
+  -moz-transition: ease-out 0.4s;
+  transition: ease-out 0.4s;
+}
+
+.options-game--theme-options > .theme-option.active,
+.options-game--theme-options > .theme-option:hover,
+.options-game--difficulty > .difficulty-option.active,
+.options-game--difficulty > .difficulty-option:hover {
+  border: 2px solid #911eba;
+  box-shadow: inset 400px 0 0 0 #911eba;
+}
+
+.tabs.options-game > .options-game--difficulty {
+  display: flex;
+  gap: 32px;
+}
+
+/* ranking dos jogadores */
+.content--tabs > .tabs.ranking {
+  /* display: none; */
+  flex-direction: column;
+}
+
+.tabs.ranking > .ranking {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background-color: #FFF;
+  max-width: 500px;
+  padding: 30px;
+  border-radius: 10px;
+}
+.tabs.ranking > .ranking > .ranking--ranking-title {
+  font-size: 3rem;
+  text-align: center;
+}
+
+.tabs.ranking > .ranking > .ranking--ranking-options {
+  display: flex;
+  border-bottom: 1px solid #CCC;
+  justify-content: center;
+}
+
+.tabs.ranking > .ranking > .ranking--ranking-options > .ranking-option {
+  font-weight: bold;
+  text-align: center;
+  padding: 14px 15px 15px;
+  width: 50%;
+  transition: all ease .3s;
+  cursor: pointer;
+}
+
+.tabs.ranking > .ranking > .ranking--ranking-options > .ranking-option:not(.active):hover,
+.tabs.ranking > .ranking > .ranking--ranking-options > .active {
+  box-shadow: inset 0 -8px 0px -2px #911eba;
+}
+
+.tabs.ranking > .ranking > .ranking--ranking-difficulty {
+  display: flex;
+  border-bottom: 1px solid #CCC;
+}
+
+.tabs.ranking > .ranking > .ranking--ranking-difficulty > .ranking-difficulty {
+  font-weight: bold;
+  text-align: center;
+  padding: 14px 15px 15px;
+  width: 50%;
+  transition: all ease .3s;
+  cursor: pointer;
+}
+
+.tabs.ranking > .ranking > .ranking--ranking-difficulty > .ranking-difficulty:not(.active):hover, 
+.tabs.ranking > .ranking > .ranking--ranking-difficulty > .ranking-difficulty.active{
+  box-shadow: inset 0 -8px 0px -2px #911eba;
+}
+
+.ranking > .ranking--ranking-content {
+  display: flex;
+  flex-direction: column;
+  height: 175px;
+  overflow-y: auto;
+}
+
+.ranking > .ranking--ranking-content > .ranking-content--option {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px;
+  border-bottom: 1px solid #EEE;
+}
+
+.ranking > .ranking--ranking-content > .ranking-content--option p {
+  font-weight: 900;
+}
+
+.ranking > .ranking--ranking-content > .ranking-content--option > .option--position-name {
+  display: flex;
+  gap: 5px;
+}
+
+.tabs.ranking > .ranking--previous-tab > .button {
+  display: inline-block;
+  padding: 14px 50px;
+  background-color: transparent;
+  border: 2px solid #FFF;
+  color: #FFF;
+  font-size: 1rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  border-radius: 3px;
+  cursor: pointer;  
+  box-shadow: inset 0 0 0 0 #911eba;
+  -webkit-transition: ease-out 0.4s;
+  -moz-transition: ease-out 0.4s;
+  transition: ease-out 0.4s;
+}
+
+.tabs.ranking > .ranking--previous-tab > .button:hover {
+  border: 2px solid #911eba;
+  box-shadow: inset 400px 0 0 0 #911eba;
+}
