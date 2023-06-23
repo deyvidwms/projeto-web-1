@@ -415,7 +415,7 @@ const adicionarPontuacao = async () => {
     adicionarPontuacaoGlobal(document.getElementById("nomeUsuario").value, sessionStorage.getItem("score"), formatarTempo(minutos) + ":" + formatarTempo(segundos), movimentos, sessionStorage.getItem("dificuldadeSelecionada"));
     adicionarPontuacaoLocal(document.getElementById("nomeUsuario").value, sessionStorage.getItem("score"), formatarTempo(minutos) + ":" + formatarTempo(segundos), movimentos, sessionStorage.getItem("dificuldadeSelecionada"));
   }
-
+  window.location.reload();
 }
 
 const adicionarPontuacaoGlobal = (nome, pontos, tempo, movimentos, dificuldade) => {
@@ -429,7 +429,11 @@ const consultarPontuacoesLocais = () => {
   const pontuacoesLocalStorage = localStorage.getItem('pontuacoes');
 
   if (pontuacoesLocalStorage === null) {
-    return [];
+    return {
+      facil: [],
+      medio: [],
+      dificil: []
+  };
   }
 
   return JSON.parse(pontuacoesLocalStorage);
@@ -439,9 +443,9 @@ const adicionarPontuacaoLocal = (nome, pontos, tempo, movimentos, dificuldade) =
   const MAXIMO_PONTUACOES = 10;
 
   let pontuacoes = consultarPontuacoesLocais();
-  pontuacoes.push({ nome, pontos, tempo, movimentos, dificuldade });
-  pontuacoes.sort((p1, p2) => { Number(p1.pontos) - Number(p2.pontos) })
-  pontuacoes = pontuacoes.slice(0, MAXIMO_PONTUACOES);
+  pontuacoes[dificuldade].push({ nome, pontos, tempo, movimentos, dificuldade });
+  pontuacoes[dificuldade].sort((p1, p2) => Number(p2.pontos) - Number(p1.pontos) );
+  pontuacoes[dificuldade] = pontuacoes[dificuldade].slice(0, MAXIMO_PONTUACOES);
 
   localStorage.setItem('pontuacoes', JSON.stringify(pontuacoes));
 }
