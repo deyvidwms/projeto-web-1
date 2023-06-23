@@ -1,19 +1,28 @@
 const MAXIMO_PONTUACOES = 10;
-let pontuacoes = [
-  novaPontuacao('Deyvid', -1, '10:01', 20),
-  novaPontuacao('Djavan', 10, 2, '10:01', 30),
-  novaPontuacao('Nathãn', 8, 3, '10:01', 40),
-  novaPontuacao('Wendy', 9, 4, '10:01', 22),
-];
+let facil = [];
+let medio = [];
+let dificil = [];
 
-function novaPontuacao(nome, pontos, tempo, movimentos) {
-  return { nome, pontos, tempo, movimentos };
+function novaPontuacao(nome, pontos, tempo, movimentos, dificuldade) {
+  return { nome, pontos, tempo, movimentos, dificuldade };
 }
 
 function adicionarPontuacao(pontuacao) {
-  pontuacoes.push(pontuacao);
-  pontuacoes.sort((p1, p2) => { p1.pontos - p2.pontos })
-  pontuacoes = pontuacoes.slice(0, MAXIMO_PONTUACOES);
+  if (pontuacao.dificuldade == 'facil'){
+    facil.push(pontuacao);
+    facil.sort((p1,p2) => {p1.pontos - p2.pontos });
+    facil = facil.slice(0, MAXIMO_PONTUACOES);
+  }
+  else if (pontuacao.dificuldade == 'medio'){
+    medio.push(pontuacao);
+    medio.sort((p1,p2) => {p1.pontos - p2.pontos });
+    medio = medio.slice(0, MAXIMO_PONTUACOES);
+  }
+  else{
+    dificil.push(pontuacao);
+    dificil.sort((p1,p2) => {p1.pontos - p2.pontos });
+    dificil = dificil.slice(0, MAXIMO_PONTUACOES);
+  }
 }
 
 function validarPostPontuacao(query) {
@@ -35,12 +44,16 @@ function validarPostPontuacao(query) {
     erros.push('Movimentos não foi informado');
   }
 
+  if (query.dificuldade == undefined) {
+    erros.push('dificuldade não foi informado');
+  }
+
   return erros;
 }
 
 function setup(app, port) {
   app.get('/pontuacao', (_, res) => {
-    res.send(pontuacoes);
+    res.send({facil, medio, dificil});
   });
 
   app.post('/pontuacao', (req, res) => {
@@ -55,7 +68,8 @@ function setup(app, port) {
     const pontos = req.query.pontos;
     const tempo = req.query.tempo;
     const movimentos = req.query.movimentos;
-    const pontuacao = novaPontuacao(nome, parseInt(pontos), tempo, movimentos);
+    const dificuldade = req.query.dificuldade;
+    const pontuacao = novaPontuacao(nome, parseInt(pontos), tempo, movimentos, dificuldade);
 
     adicionarPontuacao(pontuacao);
 
