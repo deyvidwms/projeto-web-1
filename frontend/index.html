@@ -50,7 +50,7 @@
 				</div>
 
 				<div class="game-buttons">
-					<div class="button-reload" onclick="iniciarJogo()">
+					<div class="button-reload" onclick="reiniciarJogo()">
 						<i class="fas fa-redo"></i>
 					</div>
 					<div class="button-exit" onclick="window.location.reload()">
@@ -291,9 +291,9 @@
 			<h3>Você conseguiu encontrar todas as peças!</h3>
 			<img src="./assets/images/mona-loading-dimmed.gif" alt="Boneco do Git">
 			<p>Digite suas iniciais no campo abaixo.</p>
-			<input type="text" maxlength="3">
+			<input id="nomeUsuario" type="text" maxlength="3" required>
 			<p>Pontos: <span id="qtdPontos">0</span></p>
-			<button>Enviar</button>
+			<button onclick="adicionarPontuacao()">Enviar</button>
 		</div>
 	</div>
 </body>
