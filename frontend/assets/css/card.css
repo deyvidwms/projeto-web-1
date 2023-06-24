@@ -34,7 +34,6 @@
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
   border-radius: 15px;
-  image-rendering: pixelated;
 }
 
 .card-front {

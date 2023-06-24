@@ -19,7 +19,7 @@
   top: 0;
   left: 0;
   width: 100vw;
-  height: 100vh;
+  height:100vh;
   background-image: linear-gradient(120deg ,rgb(0 0 0 / 80%) 60%, rgb(124 15 163 / 50%) 80%), url(../images/background2.jpg);
   background-size: cover;
   background-position: center;
@@ -145,6 +145,7 @@
   max-width: 500px;
   padding: 30px;
   border-radius: 10px;
+  
 }
 .tabs.ranking > .ranking > .ranking--ranking-title {
   font-size: 3rem;

@@ -45,6 +45,8 @@ const novoJogo = () => {
       slideDown(elmOptionsGame, 500);
       elmOptionsGame.style.display = 'flex';
       setTimeout(() => { elmOptionsGame.setAttribute('class', 'tabs options-game active') }, 500)
+      const initGameContent = document.getElementsByClassName('init-game--content')[0];
+      initGameContent.style.height = 'initial';
     }, 500);
   }, 500);
 }
@@ -131,6 +133,8 @@ const visualizarRanking = () => {
       slideDown(elmOptionsGame, 500);
       elmOptionsGame.style.display = 'flex';
       setTimeout(() => { elmOptionsGame.setAttribute('class', 'tabs ranking active') }, 500)
+      const initGameContent = document.getElementsByClassName('init-game--content')[0];
+      initGameContent.style.height = 'initial';
     }, 500);
   }, 500);
 }
@@ -156,8 +160,12 @@ const selecionarDificuldadeRanking = (element) => {
 }
 
 const voltarAbaJogo = () => {
+  
   const elmOptionsGame = document.getElementsByClassName('ranking')[0];
   slideUp(elmOptionsGame, 500);
+  
+  const initGameContent = document.getElementsByClassName('init-game--content')[0];
+  initGameContent.style.height = '100vh';
   
   setTimeout(() => {
     elmOptionsGame.setAttribute('class', 'tabs ranking');
@@ -246,6 +254,7 @@ const criarNovaCarta = (idCarta, frente, verso) => {
       </div>
       <div class="card-back">
         <div class="card-back-inner">
+        
           ${verso}
         </div>
       </div>
@@ -307,12 +316,15 @@ const todasCartasForamViradas = (cartas) => {
       return false;
     }
   }
+  //alternarVisualizacaoMensagemSucesso(listaCartas);
   return true;
 }
 
 const alternarVisualizacaoMensagemSucesso = () => {
   document.igetElementsByClassName('success-message-mask')[0].classList.toggle("show");
   document.getElementsByClassName('success-message')[0].classList.toggle("show");
+ /* mascaraSucesso.classList.add('show');
+  mensagemSucesso.classList.add('show');*/
 }
 
 const virarCartaParaCima = (carta) => { carta.setAttribute('data-active', 'on') };
