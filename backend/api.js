@@ -1,4 +1,4 @@
-const fs = require('fs');
+import * as fs from 'fs';
 
 const MAXIMO_PONTUACOES = 10;
 const CAMINHO_ARQUIVO_PONTUACOES = './pontuacoes.dat';
@@ -48,11 +48,28 @@ function novaPontuacaoMovimentos(nome, pontos, movimentos) {
   return { nome, pontos, movimentos };
 }
 
+function funcaoOrdenarTempo(p1, p2) {
+  const diferenca = p1.tempo - p2.tempo;
+  if (diferenca === 0) {
+    return p1.pontos - p2.pontos;
+  }
+  return diferenca;
+}
+
+function funcaoOrdenarMovimentos(p1, p2) {
+  const diferenca = p1.movimentos - p2.movimentos;
+  if (diferenca === 0) {
+    return p1.pontos - p2.pontos;
+  }
+  return diferenca;
+}
+
 function adicionarPontuacao(pontuacao, dificuldade, modo) {
   let pontuacoes = carregarPontuacoesArquivo();
 
   pontuacoes[modo][dificuldade].push(pontuacao);
-  pontuacoes[modo][dificuldade].sort((p1, p2) => { p1.pontos - p2.pontos });
+  const funcaoOrdenar = (modo === 'tempo') ? funcaoOrdenarTempo : funcaoOrdenarMovimentos;
+  pontuacoes[modo][dificuldade].sort(funcaoOrdenar);
   pontuacoes[modo][dificuldade] = pontuacoes[modo][dificuldade].slice(0, MAXIMO_PONTUACOES);
 
   salvarPontuacoesArquivo(pontuacoes);
@@ -85,7 +102,7 @@ function validarPostPontuacao(query) {
 
 function setup(app, port) {
   app.get('/pontuacao', (_, res) => {
-    res.send(pontuacoes);
+    res.send(carregarPontuacoesArquivo());
   });
 
   app.post('/pontuacao', (req, res) => {

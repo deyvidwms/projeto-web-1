@@ -359,7 +359,6 @@ const todasCartasForamViradas = (cartas) => {
       return false;
     }
   }
-  //alternarVisualizacaoMensagemSucesso(listaCartas);
   return true;
 }
 
