@@ -64,12 +64,14 @@
   -webkit-transition: ease-out 0.4s;
   -moz-transition: ease-out 0.4s;
   transition: ease-out 0.4s;
+  outline: none;
 }
 
 .content--tabs > .tabs.options-game > .options-game--start-game > .button,
 .content--tabs > .tabs.init-ranking > .button:hover {
   border: 2px solid #911eba;
   box-shadow: inset 400px 0 0 0 #911eba;
+  outline: none;
 }
 
 /* opcoes do jogo */
@@ -229,11 +231,13 @@
   -webkit-transition: ease-out 0.4s;
   -moz-transition: ease-out 0.4s;
   transition: ease-out 0.4s;
+  outline: none;
 }
 
 .tabs.ranking > .ranking--previous-tab > .button:hover {
   border: 2px solid #911eba;
   box-shadow: inset 400px 0 0 0 #911eba;
+  outline: none;
 }
 
 @media (max-width: 750px) {

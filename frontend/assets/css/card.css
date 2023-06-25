@@ -44,6 +44,11 @@
   justify-content: center;
 }
 
+.card-front > p {
+  font-family: 'Kablammo', cursive;
+  font-size: 6rem;
+}
+
 .card-back {
   border: 10px solid white;
   border-radius: 20px;

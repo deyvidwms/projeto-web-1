@@ -283,7 +283,7 @@ const criarCartas = (cartas) => {
   for (const carta of cartas) {
     const novaCarta = criarNovaCarta(
       carta['id'],
-      `<p>Carta ${carta['id']}</p>`,
+      `<p>?</p>`,
       `<p class="card-icon">${carta['carta']}</p>`);
     document.getElementById('cardLocations').innerHTML += novaCarta;
   }
