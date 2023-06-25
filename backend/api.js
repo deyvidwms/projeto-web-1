@@ -1,51 +1,83 @@
-const MAXIMO_PONTUACOES = 10;
-let facil = [];
-let medio = [];
-let dificil = [];
+const fs = require('fs');
 
-function novaPontuacao(nome, pontos, tempo, movimentos, dificuldade) {
-  return { nome, pontos, tempo, movimentos, dificuldade };
+const MAXIMO_PONTUACOES = 10;
+const CAMINHO_ARQUIVO_PONTUACOES = './pontuacoes.dat';
+
+function salvarPontuacoesArquivo(pontuacoes) {
+  fs.writeFile(CAMINHO_ARQUIVO_PONTUACOES, JSON.stringify(pontuacoes), (err) => {
+    if (err) {
+      console.error('Erro ao salvar as pontuações:', err);
+      return;
+    }
+
+    console.log('Pontuações salvas com sucesso!');
+  });
 }
 
-function adicionarPontuacao(pontuacao) {
-  if (pontuacao.dificuldade == 'facil'){
-    facil.push(pontuacao);
-    facil.sort((p1,p2) => {p1.pontos - p2.pontos });
-    facil = facil.slice(0, MAXIMO_PONTUACOES);
-  }
-  else if (pontuacao.dificuldade == 'medio'){
-    medio.push(pontuacao);
-    medio.sort((p1,p2) => {p1.pontos - p2.pontos });
-    medio = medio.slice(0, MAXIMO_PONTUACOES);
-  }
-  else{
-    dificil.push(pontuacao);
-    dificil.sort((p1,p2) => {p1.pontos - p2.pontos });
-    dificil = dificil.slice(0, MAXIMO_PONTUACOES);
-  }
+function carregarPontuacoesArquivo() {
+  fs.readFile(CAMINHO_ARQUIVO_PONTUACOES, { encoding: 'utf-8' }, (err, data) => {
+    if (err) {
+      console.error('Erro ao ler as pontuações:', err);
+      return;
+    }
+
+    const pontuacoes = (data === null || data === undefined || data.length === 0) ? {
+      'tempo': {
+        'facil': [],
+        'medio': [],
+        'dificil': [],
+      },
+      'movimentos': {
+        'facil': [],
+        'medio': [],
+        'dificil': [],
+      }
+    } : JSON.parse(data);
+
+    console.log('Pontuações lidas com sucesso!');
+
+    return pontuacoes;
+  });
+}
+
+function novaPontuacaoTempo(nome, pontos, tempo) {
+  return { nome, pontos, tempo };
+}
+
+function novaPontuacaoMovimentos(nome, pontos, movimentos) {
+  return { nome, pontos, movimentos };
+}
+
+function adicionarPontuacao(pontuacao, dificuldade, modo) {
+  let pontuacoes = carregarPontuacoesArquivo();
+
+  pontuacoes[modo][dificuldade].push(pontuacao);
+  pontuacoes[modo][dificuldade].sort((p1, p2) => { p1.pontos - p2.pontos });
+  pontuacoes[modo][dificuldade] = pontuacoes[modo][dificuldade].slice(0, MAXIMO_PONTUACOES);
+
+  salvarPontuacoesArquivo(pontuacoes);
 }
 
 function validarPostPontuacao(query) {
   const erros = [];
 
-  if (query.nome == undefined) {
+  if (query.nome === undefined) {
     erros.push('Nome não foi informado');
   }
 
-  if (query.pontos == undefined) {
+  if (query.pontos === undefined) {
     erros.push('Pontos não foi informado');
   }
 
-  if (query.tempo == undefined) {
-    erros.push('Tempo não foi informado');
+  if ((query.tempo === undefined && query.movimentos === undefined)
+    || (query.tempo !== undefined && query.movimentos !== undefined)) {
+    erros.push('É necessário informar ou o tempo ou o número de movimentos');
   }
 
-  if (query.movimentos == undefined) {
-    erros.push('Movimentos não foi informado');
-  }
-
-  if (query.dificuldade == undefined) {
-    erros.push('dificuldade não foi informado');
+  if (query.dificuldade === undefined) {
+    erros.push('Dificuldade não foi informada');
+  } else if (!['facil', 'medio', 'dificil'].includes(query.dificuldade)) {
+    erros.push('Dificuldade inválida. Opções válidas: "facil" | "medio" | "dificil"');
   }
 
   return erros;
@@ -53,7 +85,7 @@ function validarPostPontuacao(query) {
 
 function setup(app, port) {
   app.get('/pontuacao', (_, res) => {
-    res.send({facil, medio, dificil});
+    res.send(pontuacoes);
   });
 
   app.post('/pontuacao', (req, res) => {
@@ -64,14 +96,22 @@ function setup(app, port) {
       return;
     }
 
-    const nome = req.query.nome;
-    const pontos = req.query.pontos;
+    const { nome, pontos } = req.query;
     const tempo = req.query.tempo;
     const movimentos = req.query.movimentos;
     const dificuldade = req.query.dificuldade;
-    const pontuacao = novaPontuacao(nome, parseInt(pontos), tempo, movimentos, dificuldade);
 
-    adicionarPontuacao(pontuacao);
+    let pontuacao = {};
+    let modo = ''
+    if (movimentos !== undefined) {
+      pontuacao = novaPontuacaoMovimentos(nome, parseInt(pontos), movimentos);
+      modo = 'movimentos';
+    } else {
+      pontuacao = novaPontuacaoTempo(nome, parseInt(pontos), tempo);
+      modo = 'tempo';
+    }
+
+    adicionarPontuacao(pontuacao, dificuldade, modo);
 
     res.status(200).send(pontuacao);
   });
