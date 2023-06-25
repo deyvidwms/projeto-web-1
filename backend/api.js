@@ -35,16 +35,11 @@ function carregarPontuacoesArquivo() {
     pontuacoes = JSON.parse(pontuacoes);
   }
 
-  console.log("pontos:", pontuacoes);
   return pontuacoes;
 }
 
-function novaPontuacaoTempo(nome, pontos, tempo) {
-  return { nome, pontos, tempo };
-}
-
-function novaPontuacaoMovimentos(nome, pontos, movimentos) {
-  return { nome, pontos, movimentos };
+function novaPontuacao(nome, pontos, movimentos, tempo) {
+  return { nome, pontos, movimentos, tempo };
 }
 
 function funcaoOrdenarTempo(p1, p2) {
@@ -63,13 +58,16 @@ function funcaoOrdenarMovimentos(p1, p2) {
   return diferenca;
 }
 
-function adicionarPontuacao(pontuacao, dificuldade, modo) {
+function adicionarPontuacao(pontuacao, dificuldade) {
   let pontuacoes = carregarPontuacoesArquivo();
 
-  pontuacoes[modo][dificuldade].push(pontuacao);
-  const funcaoOrdenar = (modo === 'tempo') ? funcaoOrdenarTempo : funcaoOrdenarMovimentos;
-  pontuacoes[modo][dificuldade].sort(funcaoOrdenar);
-  pontuacoes[modo][dificuldade] = pontuacoes[modo][dificuldade].slice(0, MAXIMO_PONTUACOES);
+  pontuacoes['movimentos'][dificuldade].push(pontuacao);
+  pontuacoes['movimentos'][dificuldade].sort(funcaoOrdenarMovimentos);
+  pontuacoes['movimentos'][dificuldade] = pontuacoes['movimentos'][dificuldade].slice(0, MAXIMO_PONTUACOES);
+
+  pontuacoes['tempo'][dificuldade].push(pontuacao);
+  pontuacoes['tempo'][dificuldade].sort(funcaoOrdenarTempo);
+  pontuacoes['tempo'][dificuldade] = pontuacoes['tempo'][dificuldade].slice(0, MAXIMO_PONTUACOES);
 
   salvarPontuacoesArquivo(pontuacoes);
 }
@@ -85,9 +83,12 @@ function validarPostPontuacao(query) {
     erros.push('Pontos não foi informado');
   }
 
-  if ((query.tempo === undefined && query.movimentos === undefined)
-    || (query.tempo !== undefined && query.movimentos !== undefined)) {
-    erros.push('É necessário informar ou o tempo ou o número de movimentos');
+  if (query.movimentos === undefined) {
+    erros.push('Movimentos não foi informado');
+  }
+
+  if (query.tempo === undefined) {
+    erros.push('Tempo não foi informado');
   }
 
   if (query.dificuldade === undefined) {
@@ -114,17 +115,8 @@ function setup(app, port) {
 
     const { nome, pontos, tempo, movimentos, dificuldade } = req.query;
 
-    let pontuacao = {};
-    let modo = ''
-    if (movimentos !== undefined) {
-      pontuacao = novaPontuacaoMovimentos(nome, parseInt(pontos), movimentos);
-      modo = 'movimentos';
-    } else {
-      pontuacao = novaPontuacaoTempo(nome, parseInt(pontos), tempo);
-      modo = 'tempo';
-    }
-
-    adicionarPontuacao(pontuacao, dificuldade, modo);
+    const pontuacao = novaPontuacao(nome, parseInt(pontos), movimentos, tempo);
+    adicionarPontuacao(pontuacao, dificuldade);
 
     res.status(200).send(pontuacao);
   });

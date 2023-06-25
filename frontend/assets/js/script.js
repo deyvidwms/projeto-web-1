@@ -27,7 +27,7 @@ window.onload = () => {
 
   document.getElementById("moves").innerHTML = 0;
 
-  consultarPontuacoesGlobais().then((res)=>{sessionStorage.setItem('ranking', JSON.stringify(res))});
+  consultarPontuacoesGlobais().then((res) => { sessionStorage.setItem('pontuacoesGlobais', JSON.stringify(res)) });
 
 
 
@@ -117,7 +117,6 @@ const iniciarJogo = () => {
     }
 
     if (temaSelecionado === 'emoji') {
-      console.log('entrou aqui')
       cartasDoJogo = [...getEmoji()];
       criarCartas(sortearCartas(cartasDoJogo));
     } else if (temaSelecionado === 'pokemon') {
@@ -141,18 +140,34 @@ const iniciarJogo = () => {
   }
 }
 
+const carregarRankingUsandoElements = () => {
+  const dificuldades = {
+    'Fácil': 'facil',
+    'Médio': 'medio',
+    'Difícil': 'dificil',
+  };
+
+  const tipoRanking = document.querySelector(".ranking-option.active").innerText.toLowerCase();
+  const dificuldade = dificuldades[document.querySelector(".ranking-difficulty.active").innerText];
+  carregarRanking(tipoRanking, dificuldade);
+}
+
 const carregarRanking = (tipoRanking, dificuldade) => {
-  const rankingConteudo = document.getElementsByClassName('ranking--ranking-content');
-  const dataTipoRanking = JSON.parse(sessionStorage.getItem('pontuacoes'));
-  
+  const rankingConteudo = document.getElementsByClassName('ranking--ranking-content')[0];
+  const dataTipoRanking = JSON.parse(sessionStorage.getItem('pontuacoesGlobais'));
+
   rankingConteudo.innerHTML = '';
+  if (dataTipoRanking[tipoRanking][dificuldade].length === 0) {
+    rankingConteudo.innerHTML = 'Nenhuma pontuação registrada';
+  }
+
   for (let i = 0; i < dataTipoRanking[tipoRanking][dificuldade].length; i++) {
     const jogador = dataTipoRanking[tipoRanking][dificuldade][i];
     rankingConteudo.innerHTML += `
     <div class="ranking-content--option">
       <div class="option--position-name">
-        <p>${i+1}.</p>
-        <p>${jogador.nome}</p>
+        <p>${i + 1}.</p>
+        <p>${jogador.nome.toUpperCase()}</p>
       </div>
       <div class="option--points">
         <p>${tipoRanking == 'movimentos' ? jogador.pontos : jogador.tempo}${tipoRanking == 'movimentos' ? 'pts' : ''}</p>
@@ -187,7 +202,9 @@ const selecionarTipoRanking = (element) => {
     rankOption.setAttribute('class', 'ranking-option');
   }
 
-  element.setAttribute('class', 'ranking-option active')
+  element.setAttribute('class', 'ranking-option active');
+
+  carregarRankingUsandoElements();
 }
 
 const selecionarDificuldadeRanking = (element) => {
@@ -198,6 +215,8 @@ const selecionarDificuldadeRanking = (element) => {
   }
 
   element.setAttribute('class', 'ranking-difficulty active');
+
+  carregarRankingUsandoElements();
 }
 
 const voltarAbaJogo = () => {
@@ -231,7 +250,6 @@ const sortear = () => {
 }
 
 const getEmoji = () => {
-  console.log('estou dentro de emoji e a dificuldade eh', dificuldade)
   const listaEmojis = embaralhar(emojis);
   return listaEmojis.slice(0, dificuldade);
 }
@@ -443,7 +461,7 @@ const showMenuMobile = (element) => {
 
 const consultarPontuacoesGlobais = async () => {
   const res = await fetch(`${API}/pontuacao`, { mode: 'cors' });
-  
+
   return res.json();
 }
 
@@ -451,8 +469,8 @@ const adicionarPontuacao = async () => {
   if (document.getElementById("nomeUsuario").reportValidity()) {
     adicionarPontuacaoGlobal(document.getElementById("nomeUsuario").value, sessionStorage.getItem("score"), formatarTempo(minutos) + ":" + formatarTempo(segundos), movimentos, sessionStorage.getItem("dificuldadeSelecionada"));
     adicionarPontuacaoLocal(document.getElementById("nomeUsuario").value, sessionStorage.getItem("score"), formatarTempo(minutos) + ":" + formatarTempo(segundos), movimentos, sessionStorage.getItem("dificuldadeSelecionada"));
+    window.location.reload();
   }
-  window.location.reload();
 }
 
 const adicionarPontuacaoGlobal = (nome, pontos, tempo, movimentos, dificuldade) => {
