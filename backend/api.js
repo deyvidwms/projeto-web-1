@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 
 const MAXIMO_PONTUACOES = 10;
-const CAMINHO_ARQUIVO_PONTUACOES = './pontuacoes.dat';
+const CAMINHO_ARQUIVO_PONTUACOES = './pontuacoes.json';
 
 function salvarPontuacoesArquivo(pontuacoes) {
   fs.writeFile(CAMINHO_ARQUIVO_PONTUACOES, JSON.stringify(pontuacoes), (err) => {
@@ -15,13 +15,9 @@ function salvarPontuacoesArquivo(pontuacoes) {
 }
 
 function carregarPontuacoesArquivo() {
-  fs.readFile(CAMINHO_ARQUIVO_PONTUACOES, { encoding: 'utf-8' }, (err, data) => {
-    if (err) {
-      console.error('Erro ao ler as pontuações:', err);
-      return;
-    }
-
-    const pontuacoes = (data === null || data === undefined || data.length === 0) ? {
+  let pontuacoes = fs.readFileSync(CAMINHO_ARQUIVO_PONTUACOES, 'utf8');
+  if (pontuacoes.length === 0) {
+    pontuacoes = {
       'tempo': {
         'facil': [],
         'medio': [],
@@ -32,12 +28,15 @@ function carregarPontuacoesArquivo() {
         'medio': [],
         'dificil': [],
       }
-    } : JSON.parse(data);
+    }
 
-    console.log('Pontuações lidas com sucesso!');
+    fs.writeFile(CAMINHO_ARQUIVO_PONTUACOES, JSON.stringify(pontuacoes), (err) => { if (err) { throw err; } });
+  } else {
+    pontuacoes = JSON.parse(pontuacoes);
+  }
 
-    return pontuacoes;
-  });
+  console.log("pontos:", pontuacoes);
+  return pontuacoes;
 }
 
 function novaPontuacaoTempo(nome, pontos, tempo) {
@@ -113,10 +112,7 @@ function setup(app, port) {
       return;
     }
 
-    const { nome, pontos } = req.query;
-    const tempo = req.query.tempo;
-    const movimentos = req.query.movimentos;
-    const dificuldade = req.query.dificuldade;
+    const { nome, pontos, tempo, movimentos, dificuldade } = req.query;
 
     let pontuacao = {};
     let modo = ''
