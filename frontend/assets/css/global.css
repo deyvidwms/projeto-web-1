@@ -9,13 +9,12 @@ html,
 body {
   min-height: 100%;
   height: 100vh;
-  overflow-y: scroll;
-  overflow-x: hidden;
 }
 
 body {
   background-image: linear-gradient(0deg, #3D7AA8bb, #7C0FA3bb), url(../images/background-doodle.svg);
   background-attachment: fixed;
+  overflow-x: hidden;
 }
 
 .content {
