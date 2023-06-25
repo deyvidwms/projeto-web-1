@@ -27,6 +27,10 @@ window.onload = () => {
 
   document.getElementById("moves").innerHTML = 0;
 
+  sessionStorage.setItem('ranking', consultarPontuacoesGlobais());
+
+
+
   const highscore = localStorage.getItem('highscore');
   if (highscore == null) {
     localStorage.setItem('highscore', '0');
@@ -101,15 +105,15 @@ const iniciarJogo = () => {
   const dificuldadeSelecionada = sessionStorage.getItem('dificuldadeSelecionada') || null;
 
   if (temaSelecionado != null && dificuldadeSelecionada != null) {
-    if ( dificuldadeSelecionada === 'facil') {
+    if (dificuldadeSelecionada === 'facil') {
       dificuldade = 4;
-    } else if ( dificuldadeSelecionada === 'medio' ) {
+    } else if (dificuldadeSelecionada === 'medio') {
       dificuldade = 8;
-    } else if ( dificuldadeSelecionada === 'dificil' ) {
+    } else if (dificuldadeSelecionada === 'dificil') {
       dificuldade = 10;
       document.getElementById('cardLocations').style.gridTemplateColumns = 'repeat(5, 1fr)';
     }
-      
+
     if (temaSelecionado === 'emoji') {
       console.log('entrou aqui')
       cartasDoJogo = [...getEmoji()];
@@ -135,7 +139,28 @@ const iniciarJogo = () => {
   }
 }
 
+const carregarRanking = (tipoRanking, dificuldade) => {
+  const rankingConteudo = document.getElementsByClassName('ranking--ranking-content');
+  const dataTipoRanking = sessionStorage.getItem('pontuacoes');
+  
+  rankingConteudo.innerHTML = '';
+  for (let i = 0; i < 10; i++) {
+    const jogador = dataTipoRanking[tipoRanking][dificuldade][i];
+    rankingConteudo.innerHTML += `
+    <div class="ranking-content--option">
+      <div class="option--position-name">
+        <p>${i+1}.</p>
+        <p>${jogador.nome}</p>
+      </div>
+      <div class="option--points">
+        <p>${tipoRanking == 'movimentos' ? jogador.pontos : jogador.tempo}${tipoRanking == 'movimentos' ? 'pts' : ''}</p>
+      </div>
+		</div>`;
+  }
+}
+
 const visualizarRanking = () => {
+  carregarRanking('movimentos', 'facil');
   const elmInitRanking = document.getElementsByClassName('init-ranking')[0];
   slideUp(elmInitRanking, 500);
 
@@ -174,16 +199,16 @@ const selecionarDificuldadeRanking = (element) => {
 }
 
 const voltarAbaJogo = () => {
-  
+
   const elmOptionsGame = document.getElementsByClassName('ranking')[0];
   slideUp(elmOptionsGame, 500);
-  
+
   const initGameContent = document.getElementsByClassName('init-game--content')[0];
   initGameContent.style.height = '100vh';
-  
+
   setTimeout(() => {
     elmOptionsGame.setAttribute('class', 'tabs ranking');
-    
+
     setTimeout(() => {
       const elmInitRanking = document.getElementsByClassName('init-ranking')[0];
       slideDown(elmInitRanking, 500);
@@ -421,7 +446,7 @@ const consultarPontuacoesGlobais = async () => {
 }
 
 const adicionarPontuacao = async () => {
-  if (document.getElementById("nomeUsuario").reportValidity()){
+  if (document.getElementById("nomeUsuario").reportValidity()) {
     adicionarPontuacaoGlobal(document.getElementById("nomeUsuario").value, sessionStorage.getItem("score"), formatarTempo(minutos) + ":" + formatarTempo(segundos), movimentos, sessionStorage.getItem("dificuldadeSelecionada"));
     adicionarPontuacaoLocal(document.getElementById("nomeUsuario").value, sessionStorage.getItem("score"), formatarTempo(minutos) + ":" + formatarTempo(segundos), movimentos, sessionStorage.getItem("dificuldadeSelecionada"));
   }
@@ -443,7 +468,7 @@ const consultarPontuacoesLocais = () => {
       facil: [],
       medio: [],
       dificil: []
-  };
+    };
   }
 
   return JSON.parse(pontuacoesLocalStorage);
@@ -454,7 +479,7 @@ const adicionarPontuacaoLocal = (nome, pontos, tempo, movimentos, dificuldade) =
 
   let pontuacoes = consultarPontuacoesLocais();
   pontuacoes[dificuldade].push({ nome, pontos, tempo, movimentos, dificuldade });
-  pontuacoes[dificuldade].sort((p1, p2) => Number(p2.pontos) - Number(p1.pontos) );
+  pontuacoes[dificuldade].sort((p1, p2) => Number(p2.pontos) - Number(p1.pontos));
   pontuacoes[dificuldade] = pontuacoes[dificuldade].slice(0, MAXIMO_PONTUACOES);
 
   localStorage.setItem('pontuacoes', JSON.stringify(pontuacoes));
