@@ -337,16 +337,9 @@ const todasCartasForamViradas = (cartas) => {
 }
 
 const alternarVisualizacaoMensagemSucesso = () => {
-<<<<<<< HEAD
-  document.igetElementsByClassName('success-message-mask')[0].classList.toggle("show");
-  document.getElementsByClassName('success-message')[0].classList.toggle("show");
- /* mascaraSucesso.classList.add('show');
-  mensagemSucesso.classList.add('show');*/
-=======
   document.getElementsByClassName('success-message')[0].style.display = 'flex';
   document.getElementById('qtdPontos').innerHTML = sessionStorage.getItem('score') || 0;
   clearInterval(cronometro);
->>>>>>> 88daee7bbdadeeb53ff76fbcad70f13c910cc139
 }
 
 const virarCartaParaCima = (carta) => { carta.setAttribute('data-active', 'on') };
