@@ -104,7 +104,7 @@ function setup(app, port) {
   app.get('/pontuacao', (_, res) => {
     res.send(carregarPontuacoesArquivo());
   });
-
+  
   app.post('/pontuacao', (req, res) => {
     const erros = validarPostPontuacao(req.query);
 

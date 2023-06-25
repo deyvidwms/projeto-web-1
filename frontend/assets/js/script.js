@@ -155,7 +155,7 @@ const carregarRankingUsandoElements = () => {
 const carregarRanking = (tipoRanking, dificuldade) => {
   const rankingConteudo = document.getElementsByClassName('ranking--ranking-content')[0];
   const dataTipoRanking = JSON.parse(sessionStorage.getItem('pontuacoesGlobais'));
-
+  
   rankingConteudo.innerHTML = '';
   if (dataTipoRanking[tipoRanking][dificuldade].length === 0) {
     rankingConteudo.innerHTML = 'Nenhuma pontuação registrada';
@@ -485,14 +485,22 @@ const consultarPontuacoesLocais = () => {
 
   if (pontuacoesLocalStorage === null) {
     return {
-      facil: [],
-      medio: [],
-      dificil: []
+      'tempo': {
+        'facil': [],
+        'medio': [],
+        'dificil': [],
+      },
+      'movimentos': {
+        'facil': [],
+        'medio': [],
+        'dificil': [],
+      }
     };
   }
 
   return JSON.parse(pontuacoesLocalStorage);
 }
+
 
 const adicionarPontuacaoLocal = (nome, pontos, tempo, movimentos, dificuldade) => {
   const MAXIMO_PONTUACOES = 10;

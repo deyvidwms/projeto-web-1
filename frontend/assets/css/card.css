@@ -53,7 +53,7 @@
 .card-back {
   border: 10px solid white;
   border-radius: 20px;
-  background-color: #2980b9;
+  background-color: #ffffff;
   color: white;
   transform: rotateY(180deg);
   display: flex;
