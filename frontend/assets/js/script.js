@@ -27,7 +27,7 @@ window.onload = () => {
 
   document.getElementById("moves").innerHTML = 0;
 
-  sessionStorage.setItem('ranking', consultarPontuacoesGlobais());
+  consultarPontuacoesGlobais().then((res)=>{sessionStorage.setItem('ranking', JSON.stringify(res))});
 
 
 
@@ -143,10 +143,10 @@ const iniciarJogo = () => {
 
 const carregarRanking = (tipoRanking, dificuldade) => {
   const rankingConteudo = document.getElementsByClassName('ranking--ranking-content');
-  const dataTipoRanking = sessionStorage.getItem('pontuacoes');
+  const dataTipoRanking = JSON.parse(sessionStorage.getItem('pontuacoes'));
   
   rankingConteudo.innerHTML = '';
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < dataTipoRanking[tipoRanking][dificuldade].length; i++) {
     const jogador = dataTipoRanking[tipoRanking][dificuldade][i];
     rankingConteudo.innerHTML += `
     <div class="ranking-content--option">
@@ -443,7 +443,8 @@ const showMenuMobile = (element) => {
 
 const consultarPontuacoesGlobais = async () => {
   const res = await fetch(`${API}/pontuacao`, { mode: 'cors' });
-  return await res.json();
+  
+  return res.json();
 }
 
 const adicionarPontuacao = async () => {
