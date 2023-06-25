@@ -49,8 +49,10 @@ const novoJogo = () => {
       slideDown(elmOptionsGame, 500);
       elmOptionsGame.style.display = 'flex';
       setTimeout(() => { elmOptionsGame.setAttribute('class', 'tabs options-game active') }, 500)
-      const initGameContent = document.getElementsByClassName('init-game--content')[0];
-      initGameContent.style.height = 'initial';
+      if (window.innerHeight <= 762) {
+        const initGameContent = document.getElementsByClassName('init-game--content')[0];
+        initGameContent.style.height = 'initial';
+      }
     }, 500);
   }, 500);
 }
@@ -306,7 +308,7 @@ const criarCartas = (cartas) => {
   for (const carta of cartas) {
     const novaCarta = criarNovaCarta(
       carta['id'],
-      `<p>Carta ${carta['id']}</p>`,
+      `<p>?</p>`,
       `<p class="card-icon">${carta['carta']}</p>`);
     document.getElementById('cardLocations').innerHTML += novaCarta;
   }

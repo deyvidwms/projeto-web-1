@@ -18,6 +18,7 @@
 }
 
 .card-icon {
+  font-size: 4rem;
   filter: drop-shadow(0 0 2px rgb(0 0 0))
 }
 
@@ -42,6 +43,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.card-front > p {
+  font-family: 'Kablammo', cursive;
+  font-size: 6rem;
 }
 
 .card-back {

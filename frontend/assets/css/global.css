@@ -9,13 +9,12 @@ html,
 body {
   min-height: 100%;
   height: 100vh;
-  overflow-y: scroll;
-  overflow-x: hidden;
 }
 
 body {
   background-image: linear-gradient(0deg, #3D7AA8bb, #7C0FA3bb), url(../images/background-doodle.svg);
   background-attachment: fixed;
+  overflow-x: hidden;
 }
 
 .content {
@@ -74,6 +73,7 @@ body {
               0px 0px 5px rgb(0 0 0 / 45%);
   transition: all ease .3s;
   cursor: pointer;
+  outline: none;
 }
 
 .button-reload:hover {
@@ -167,6 +167,7 @@ body {
   -webkit-transition: ease-out 0.4s;
   -moz-transition: ease-out 0.4s;
   transition: ease-out 0.4s;
+  outline: none;
 }
 
 .success-message--content > button:hover {
