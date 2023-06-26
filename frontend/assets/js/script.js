@@ -469,7 +469,6 @@ const adicionarPontuacao = async () => {
   if (document.getElementById("nomeUsuario").reportValidity()) {
     adicionarPontuacaoGlobal(document.getElementById("nomeUsuario").value, sessionStorage.getItem("score"), formatarTempo(minutos) + ":" + formatarTempo(segundos), movimentos, sessionStorage.getItem("dificuldadeSelecionada"));
     adicionarPontuacaoLocal(document.getElementById("nomeUsuario").value, sessionStorage.getItem("score"), formatarTempo(minutos) + ":" + formatarTempo(segundos), movimentos, sessionStorage.getItem("dificuldadeSelecionada"));
-    window.location.reload();
   }
 }
 
@@ -478,6 +477,8 @@ const adicionarPontuacaoGlobal = (nome, pontos, tempo, movimentos, dificuldade) 
     method: 'POST',
     headers: { "Content-type": "application/json; charset=UTF-8" }
   });
+
+  window.location.reload();
 }
 
 const consultarPontuacoesLocais = () => {
